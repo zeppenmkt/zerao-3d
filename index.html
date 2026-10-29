@@ -4,138 +4,279 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#090b10" />
-    <meta
-      name="description"
-      content="ZERÃO — treino de pernas com acompanhamento de séries, cargas, histórico e demonstrações 3D."
-    />
-    <title>ZERÃO — O verão do Zé</title>
+    <meta name="description" content="ZERÃO. Do Zero ao Zé no Verão — treino, alimentação, peso, sono, suplementação, saúde e evolução do shape." />
+    <title>ZERÃO — Do Zero ao Zé no Verão</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,800&family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="noise" aria-hidden="true"></div>
 
-    <header class="hero">
+    <header class="hero hero-portal" id="inicio">
       <nav class="topbar" aria-label="Navegação principal">
-        <a class="brand" href="#inicio" aria-label="ZERÃO — início">
-          <span class="brand-mark">Z</span>
-          <span>ZERÃO</span>
-        </a>
-        <button class="history-button" id="open-history" type="button">
-          <span aria-hidden="true">↗</span> Histórico
-        </button>
+        <a class="brand" href="#inicio" aria-label="ZERÃO — início"><span class="brand-mark">Z</span><span>ZERÃO</span></a>
+        <div class="top-actions">
+          <span class="local-badge" id="sync-badge"><i></i> Privado e sincronizado</span>
+          <button class="history-button" id="open-history" type="button"><span aria-hidden="true">↗</span> Treinos</button>
+        </div>
       </nav>
 
-      <div class="hero-content" id="inicio">
-        <div class="eyebrow"><span></span> Projeto verão · treino de pernas</div>
-        <h1>O VERÃO<br /><em>DO ZÉ.</em></h1>
-        <p>Constância vence motivação. Uma série por vez.</p>
+      <div class="hero-content portal-hero-content">
+        <div class="eyebrow"><span></span> Projeto integral de evolução</div>
+        <h1>ZERÃO.<br /><em>DO ZERO AO ZÉ<br />NO VERÃO.</em></h1>
+        <p>Treino, alimentação, descanso e saúde trabalhando juntos. Sem milagre: evolução registrada, um dia de cada vez.</p>
+        <div class="hero-pills" aria-label="Áreas acompanhadas">
+          <span>Treino</span><span>Alimentação</span><span>Peso</span><span>Shape</span><span>Sono</span><span>Saúde</span>
+        </div>
       </div>
 
-      <div class="progress-panel" aria-live="polite">
-        <div class="progress-copy">
-          <span>Progresso de hoje</span>
-          <strong id="progress-percent">0%</strong>
+      <div class="overall-panel" aria-live="polite">
+        <div class="overall-head">
+          <div><span class="panel-kicker">Placar de hoje</span><strong id="overall-score">0%</strong></div>
+          <p id="overall-message">Seu próximo passo começa aqui.</p>
         </div>
-        <div class="progress-track" aria-hidden="true">
-          <div id="progress-bar"></div>
-        </div>
-        <div class="progress-meta">
-          <span><b id="completed-sets">0</b> de <b id="total-sets">0</b> séries</span>
-          <span id="progress-message">Começa no seu ritmo.</span>
+        <div class="overall-track" aria-hidden="true"><div id="overall-bar"></div></div>
+        <div class="pillar-row">
+          <span data-pillar="workout"><i></i> Treino</span>
+          <span data-pillar="nutrition"><i></i> Alimentação</span>
+          <span data-pillar="water"><i></i> Água</span>
+          <span data-pillar="sleep"><i></i> Sono</span>
+          <span data-pillar="supplements"><i></i> Suplementos</span>
         </div>
       </div>
     </header>
 
+    <nav class="module-nav" aria-label="Módulos do Zerão">
+      <div>
+        <a href="#visao-geral">Visão geral</a><a href="#treino">Treino</a><a href="#alimentacao">Alimentação</a>
+        <a href="#progresso">Progresso</a><a href="#shape">Fotos do shape</a><a href="#sono">Sono</a><a href="#suplementacao">Suplementação</a><a href="#saude">Saúde</a>
+      </div>
+    </nav>
+
     <main>
-      <section class="workout-section" aria-labelledby="workout-title">
-        <div class="section-heading">
-          <div>
-            <span class="section-number">01</span>
-            <h2 id="workout-title">TREINO DE PERNAS</h2>
-          </div>
-          <p>Marque cada série. As cargas ficam salvas neste aparelho.</p>
+      <section class="portal-section overview-section" id="visao-geral" aria-labelledby="overview-title">
+        <div class="portal-heading">
+          <div><span class="section-number">00</span><div><p>Seu painel</p><h2 id="overview-title">A EVOLUÇÃO COMPLETA.</h2></div></div>
+          <p>O shape é consequência da rotina inteira. Registre o que fez hoje e enxergue o que precisa de atenção.</p>
         </div>
+        <div class="overview-grid">
+          <article class="focus-card dashboard-card">
+            <span class="card-label">Fase atual</span><div class="phase-number">01</div><h3>CONSTRUIR A BASE.</h3>
+            <p>Constância no treino, alimentação consciente, sono melhor e acompanhamento da saúde.</p><div class="phase-line"><span></span></div>
+          </article>
+          <article class="today-card dashboard-card">
+            <div class="card-title-row"><span class="card-label">Hoje</span><b id="today-label"></b></div>
+            <button class="daily-task" data-check="water" type="button"><i>✓</i><span><b>Hidratação</b><small>Marque quando cumprir sua meta do dia</small></span></button>
+            <div class="daily-task derived" data-derived="nutrition"><i>✓</i><span><b>Alimentação</b><small id="nutrition-task-copy">Nenhuma refeição registrada</small></span></div>
+            <div class="daily-task derived" data-derived="sleep"><i>✓</i><span><b>Sono</b><small id="sleep-task-copy">Sono ainda não registrado</small></span></div>
+            <div class="daily-task derived" data-derived="workout"><i>✓</i><span><b>Treino</b><small id="workout-task-copy">Treino ainda não iniciado</small></span></div>
+          </article>
+          <article class="metrics-card dashboard-card">
+            <span class="card-label">Indicadores rápidos</span>
+            <div class="metric-grid">
+              <div><small>Peso atual</small><strong id="metric-weight">—</strong><span>kg</span></div>
+              <div><small>Último sono</small><strong id="metric-sleep">—</strong><span>horas</span></div>
+              <div><small>Séries hoje</small><strong id="metric-workout">0/0</strong><span>concluídas</span></div>
+              <div><small>Refeições</small><strong id="metric-meals">0</strong><span>registradas</span></div>
+            </div>
+          </article>
+        </div>
+      </section>
 
+      <section class="workout-section module-section" id="treino" aria-labelledby="workout-title">
+        <div class="section-heading">
+          <div><span class="section-number">01</span><div><p class="section-kicker">Ciclo interativo 4×1</p><h2 id="workout-title">TREINO A — PEITO + OMBROS</h2></div></div>
+          <p id="workout-description">Peitoral superior, peitoral geral e deltoides. Marque as séries, registre as cargas e consulte cada movimento em 3D.</p>
+        </div>
+        <div class="workout-selector" id="workout-selector" aria-label="Escolha o treino do ciclo">
+          <button class="active" type="button" data-workout="A" aria-pressed="true"><span>A</span><b>Peito + ombros</b></button>
+          <i aria-hidden="true">→</i>
+          <button type="button" data-workout="B" aria-pressed="false"><span>B</span><b>Pernas + panturrilhas</b></button>
+          <i aria-hidden="true">→</i>
+          <button type="button" data-workout="C" aria-pressed="false"><span>C</span><b>Costas + abdômen</b></button>
+          <i aria-hidden="true">→</i>
+          <button type="button" data-workout="D" aria-pressed="false"><span>D</span><b>Braços + antebraço</b></button>
+          <i aria-hidden="true">→</i>
+          <div class="cycle-rest"><span>R</span><b>Descanso</b></div>
+        </div>
+        <div class="progress-panel workout-progress" aria-live="polite">
+          <div class="progress-copy"><span>Progresso deste treino</span><strong id="progress-percent">0%</strong></div>
+          <div class="progress-track" aria-hidden="true"><div id="progress-bar"></div></div>
+          <div class="progress-meta"><span><b id="completed-sets">0</b> de <b id="total-sets">0</b> séries</span><span id="progress-message">Começa no seu ritmo.</span></div>
+        </div>
         <div class="exercise-list" id="exercise-list"></div>
-
         <div class="finish-card">
-          <div>
-            <span class="finish-kicker">Fechou o treino?</span>
-            <h2>REGISTRA ESSA VITÓRIA.</h2>
-          </div>
+          <div><span class="finish-kicker">Fechou o treino?</span><h2>REGISTRA ESSA VITÓRIA.</h2></div>
           <button id="finish-workout" type="button">Concluir treino <span>→</span></button>
+        </div>
+      </section>
+
+      <section class="portal-section module-section" id="alimentacao" aria-labelledby="nutrition-title">
+        <div class="portal-heading">
+          <div><span class="section-number">02</span><div><p>Diário alimentar</p><h2 id="nutrition-title">COMER TAMBÉM É TREINAR.</h2></div></div>
+          <p>Registre o que comeu e acompanhe a meta diária. Fotos de comida podem ser analisadas no chat, mas aqui entram somente os dados.</p>
+        </div>
+        <div class="split-layout">
+          <form class="entry-card" id="meal-form">
+            <span class="card-label">Nova refeição</span>
+            <label>Momento<select id="meal-type" required><option>Café da manhã</option><option>Almoço</option><option>Lanche</option><option>Jantar</option><option>Ceia</option></select></label>
+            <label>O que comeu<input id="meal-description" type="text" maxlength="140" placeholder="Ex.: arroz, feijão, carne e salada" required /></label>
+            <div class="meal-macro-fields">
+              <label>Calorias <span>estimativa</span><div class="field-with-unit"><input id="meal-calories" type="number" min="0" max="5000" inputmode="decimal" placeholder="0" /><b>kcal</b></div></label>
+              <label>Proteína <span>estimativa</span><div class="field-with-unit"><input id="meal-protein" type="number" min="0" max="300" inputmode="decimal" placeholder="0" /><b>g</b></div></label>
+              <label>Carboidratos <span>estimativa</span><div class="field-with-unit"><input id="meal-carbs" type="number" min="0" max="600" inputmode="decimal" placeholder="0" /><b>g</b></div></label>
+              <label>Gorduras <span>estimativa</span><div class="field-with-unit"><input id="meal-fat" type="number" min="0" max="300" inputmode="decimal" placeholder="0" /><b>g</b></div></label>
+            </div>
+            <button class="primary-button" type="submit">Registrar refeição <span>→</span></button>
+          </form>
+          <div class="log-card">
+            <div class="card-title-row"><span class="card-label">Refeições de hoje</span><b id="meal-count">0 registros</b></div>
+            <div class="entry-list" id="meal-list"></div>
+            <div class="nutrition-targets" aria-label="Metas nutricionais de hoje">
+              <div data-nutrient="calories"><span><b>Calorias</b><em id="nutrition-calories">0 / 2.300 kcal</em></span><i><u></u></i></div>
+              <div data-nutrient="protein"><span><b>Proteína</b><em id="nutrition-protein">0 / 190 g</em></span><i><u></u></i></div>
+              <div data-nutrient="carbs"><span><b>Carboidratos</b><em id="nutrition-carbs">0 / 205 g</em></span><i><u></u></i></div>
+              <div data-nutrient="fat"><span><b>Gorduras</b><em id="nutrition-fat">0 / 80 g</em></span><i><u></u></i></div>
+            </div>
+            <aside class="context-note"><b>Leitura do Zerão</b><p>Meta de referência: 2.300 kcal e 190 g de proteína. As estimativas do chat entram como números, sem guardar a foto da comida.</p></aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="portal-section module-section progress-section" id="progresso" aria-labelledby="body-title">
+        <div class="portal-heading">
+          <div><span class="section-number">03</span><div><p>Peso e tendência</p><h2 id="body-title">OLHA A CURVA, NÃO O DIA.</h2></div></div>
+          <p>O peso oscila. O Zerão destaca a tendência para você não comemorar ou se desesperar por uma única medição.</p>
+        </div>
+        <div class="progress-layout">
+          <form class="compact-form" id="weight-form">
+            <label>Peso de hoje<div class="field-with-unit"><input id="weight-value" type="number" min="30" max="300" step="0.1" inputmode="decimal" placeholder="00,0" required /><b>kg</b></div></label>
+            <label>Data<input id="weight-date" type="date" required /></label><button class="primary-button" type="submit">Salvar peso</button>
+          </form>
+          <article class="chart-card">
+            <div class="chart-head"><div><span class="card-label">Últimas medições</span><strong id="weight-change">Registre seu primeiro peso</strong></div><span id="weight-current">— kg</span></div>
+            <svg id="weight-chart" viewBox="0 0 720 220" role="img" aria-label="Evolução do peso"><line x1="30" y1="190" x2="690" y2="190"></line><g id="weight-chart-data"></g></svg>
+            <div class="chart-labels"><span id="chart-start">Início</span><span id="chart-end">Hoje</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="portal-section module-section shape-section" id="shape" aria-labelledby="shape-title">
+        <div class="portal-heading">
+          <div><span class="section-number">04</span><div><p>Evolução visual privada</p><h2 id="shape-title">O ESPELHO CONTA A HISTÓRIA.</h2></div></div>
+          <p>Guarde fotos do shape por data e ângulo. Elas ficam protegidas por login, fora do GitHub e não aparecem no site principal.</p>
+        </div>
+        <div class="shape-layout">
+          <form class="entry-card shape-form" id="shape-form">
+            <span class="card-label">Nova foto de evolução</span>
+            <label>Foto do shape<input id="shape-photo" type="file" accept="image/jpeg,image/png,image/webp" required /></label>
+            <div class="shape-form-row">
+              <label>Data<input id="shape-date" type="date" required /></label>
+              <label>Ângulo<select id="shape-view"><option>Frente</option><option>Lado</option><option>Costas</option><option>Outro</option></select></label>
+            </div>
+            <label>Observação <span>opcional</span><input id="shape-note" type="text" maxlength="160" placeholder="Ex.: mesma luz, ao acordar" /></label>
+            <button class="primary-button" type="submit">Guardar foto com segurança <span>→</span></button>
+            <p class="privacy-copy"><span>🔒</span> A imagem é enviada somente para sua área privada na Hostinger.</p>
+          </form>
+          <div class="log-card shape-gallery-card">
+            <div class="card-title-row"><span class="card-label">Linha do shape</span><b id="shape-count">0 fotos</b></div>
+            <div class="shape-compare" id="shape-compare" hidden></div>
+            <div class="shape-gallery" id="shape-gallery"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="portal-section module-section" id="sono" aria-labelledby="sleep-title">
+        <div class="portal-heading">
+          <div><span class="section-number">05</span><div><p>Recuperação</p><h2 id="sleep-title">O SHAPE TAMBÉM DORME.</h2></div></div>
+          <p>Tempo e qualidade do sono influenciam treino, fome, disposição e recuperação.</p>
+        </div>
+        <div class="split-layout sleep-layout">
+          <form class="entry-card" id="sleep-form">
+            <span class="card-label">Registrar noite</span>
+            <label>Horas dormidas<div class="field-with-unit"><input id="sleep-hours" type="number" min="0" max="16" step="0.1" inputmode="decimal" placeholder="7,5" required /><b>h</b></div></label>
+            <label>Horário em que deitou<input id="sleep-time" type="time" /></label>
+            <label>Qualidade percebida <span id="sleep-quality-label">3 · razoável</span><input id="sleep-quality" type="range" min="1" max="5" value="3" /></label>
+            <button class="primary-button" type="submit">Salvar noite <span>→</span></button>
+          </form>
+          <article class="recovery-card">
+            <span class="card-label">Última recuperação</span><div class="sleep-score"><strong id="last-sleep-hours">—</strong><span>horas</span></div>
+            <div class="recovery-meter"><div id="recovery-bar"></div></div><p id="sleep-insight">Registre uma noite para começar a entender seu padrão.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="portal-section module-section" id="suplementacao" aria-labelledby="supp-title">
+        <div class="portal-heading">
+          <div><span class="section-number">06</span><div><p>Rotina orientada</p><h2 id="supp-title">SUPLEMENTO SEM ESQUECIMENTO.</h2></div></div>
+          <p>Cadastre somente o que já faz parte da sua orientação profissional e marque o uso diário.</p>
+        </div>
+        <div class="split-layout">
+          <form class="compact-form vertical-form" id="supplement-form">
+            <label>Nome do suplemento<input id="supplement-name" type="text" maxlength="60" placeholder="Ex.: suplemento prescrito" required /></label>
+            <label>Orientação/horário<input id="supplement-instruction" type="text" maxlength="90" placeholder="Ex.: após o café" /></label>
+            <button class="primary-button" type="submit">Adicionar à rotina</button>
+          </form>
+          <div class="log-card">
+            <div class="card-title-row"><span class="card-label">Rotina de hoje</span><b id="supplement-count">0 itens</b></div>
+            <div class="supplement-list" id="supplement-list"></div>
+            <p class="medical-caption">O Zerão apenas registra sua rotina. Inclusão, retirada ou alteração de suplementos deve ser discutida com um profissional.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="portal-section module-section health-section" id="saude" aria-labelledby="health-title">
+        <div class="portal-heading">
+          <div><span class="section-number">07</span><div><p>Saúde em contexto</p><h2 id="health-title">O SHAPE NÃO VEM ANTES DA SAÚDE.</h2></div></div>
+          <p>Guarde observações para levar às consultas e acompanhe o que merece atenção, sem substituir avaliação médica.</p>
+        </div>
+        <div class="health-layout">
+          <form class="entry-card health-form" id="health-form">
+            <span class="card-label">Nova observação</span>
+            <label>Categoria<select id="health-category"><option>Observação geral</option><option>Consulta</option><option>Exame</option><option>Sintoma</option><option>Medicação</option></select></label>
+            <label>Data<input id="health-date" type="date" required /></label>
+            <label>Anotação<textarea id="health-note" maxlength="400" rows="5" placeholder="Registre algo importante para conversar com seu profissional de saúde" required></textarea></label>
+            <button class="primary-button" type="submit">Salvar observação <span>→</span></button>
+          </form>
+          <div class="health-log log-card">
+            <div class="card-title-row"><span class="card-label">Linha de cuidado</span><b>Privado e sincronizado</b></div>
+            <div class="entry-list" id="health-list"></div>
+            <aside class="health-warning"><span>!</span><p>Este espaço organiza informações pessoais e não oferece diagnóstico ou recomendação médica.</p></aside>
+          </div>
         </div>
       </section>
     </main>
 
     <footer>
-      <div class="brand footer-brand"><span class="brand-mark">Z</span><span>ZERÃO</span></div>
-      <p>Feito para o Zé chegar no verão.</p>
-      <span>Dados salvos localmente no navegador.</span>
+      <div class="brand footer-brand"><span class="brand-mark">Z</span><span>ZERÃO</span></div><p>Do Zero ao Zé no Verão.</p><span>Área privada · dados sincronizados na Hostinger.</span>
     </footer>
 
     <dialog class="modal movement-modal" id="movement-modal">
       <button class="modal-close" id="close-movement" type="button" aria-label="Fechar">×</button>
       <div class="modal-grid">
         <div class="viewer-wrap">
-          <div class="viewer-topline">
-            <span>Demonstração 3D</span>
-            <span class="live-dot"><i></i> Em movimento</span>
-          </div>
-          <div id="three-viewer" aria-label="Modelo humano 3D demonstrando o exercício"></div>
-          <div class="viewer-help">Arraste para girar · use dois dedos para aproximar</div>
-          <div class="viewer-fallback" id="viewer-fallback" hidden>
-            <span>3D</span>
-            <p>Não foi possível carregar o modelo. Verifique sua conexão.</p>
-          </div>
+          <div class="viewer-topline"><span>Demonstração 3D</span><span class="live-dot"><i></i> Em movimento</span></div>
+          <div id="three-viewer" aria-label="Modelo humano 3D demonstrando o exercício"></div><div class="viewer-help">Arraste para girar · use dois dedos para aproximar</div>
+          <div class="viewer-fallback" id="viewer-fallback" hidden><span>3D</span><p>Não foi possível carregar o modelo. Verifique sua conexão.</p></div>
         </div>
-
         <div class="movement-copy">
-          <span class="modal-index" id="modal-index">01</span>
-          <h2 id="modal-title">Agachamento livre</h2>
-          <p id="modal-prescription">4 séries · 8–10 repetições</p>
-          <div class="cue-box">
-            <span>Execução</span>
-            <p id="modal-cue"></p>
-          </div>
-          <div class="warning-box">
-            <span>!</span>
-            <p>Modelo visual simplificado. Ajuste a técnica com um profissional de educação física.</p>
-          </div>
-          <button class="play-button" id="toggle-animation" type="button">
-            <span id="play-icon">Ⅱ</span> <b id="play-label">Pausar animação</b>
-          </button>
-          <a class="youtube-button" id="youtube-link" href="#" target="_blank" rel="noopener noreferrer">
-            <span class="youtube-icon">▶</span>
-            Ver Leandro Twin no YouTube
-            <span>↗</span>
-          </a>
+          <span class="modal-index" id="modal-index">01</span><h2 id="modal-title">Agachamento livre</h2><p id="modal-prescription">4 séries · 8–10 repetições</p>
+          <div class="cue-box"><span>Execução</span><p id="modal-cue"></p></div><div class="warning-box"><span>!</span><p>Modelo visual simplificado. Ajuste a técnica com um profissional de educação física.</p></div>
+          <button class="play-button" id="toggle-animation" type="button"><span id="play-icon">Ⅱ</span> <b id="play-label">Pausar animação</b></button>
+          <a class="youtube-button" id="youtube-link" href="#" target="_blank" rel="noopener noreferrer"><span class="youtube-icon">▶</span>Ver Leandro Twin no YouTube<span>↗</span></a>
         </div>
       </div>
     </dialog>
 
     <dialog class="modal history-modal" id="history-modal">
       <button class="modal-close" id="close-history" type="button" aria-label="Fechar">×</button>
-      <div class="history-header">
-        <span class="section-number">H</span>
-        <div>
-          <p>Seu caminho</p>
-          <h2>HISTÓRICO</h2>
-        </div>
-      </div>
-      <div class="history-list" id="history-list"></div>
-      <button class="clear-history" id="clear-history" type="button">Limpar histórico</button>
+      <div class="history-header"><span class="section-number">H</span><div><p>Seu caminho</p><h2>HISTÓRICO DE TREINOS</h2></div></div>
+      <div class="history-list" id="history-list"></div><button class="clear-history" id="clear-history" type="button">Limpar histórico de treinos</button>
     </dialog>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js" defer></script>
-    <script src="app.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js" defer></script><script src="sync.js" defer></script>
   </body>
 </html>

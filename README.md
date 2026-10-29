@@ -1,22 +1,25 @@
-# ZERÃO — O verão do Zé
+# ZERÃO — Do Zero ao Zé no Verão
 
-Aplicativo web estático para acompanhar um treino de pernas, registrar séries e cargas e consultar demonstrações humanas 3D de cada exercício.
+Portal pessoal de evolução integral do Zé. O projeto combina treino, alimentação, peso, sono, suplementação e observações de saúde em uma única rotina diária.
 
 ## Recursos
 
-- oito exercícios de pernas;
-- marcação individual de séries e cargas;
-- progresso do treino em tempo real;
-- histórico salvo no navegador;
-- modelo humano 3D animado, giratório e com pausa;
-- pesquisa direta de cada exercício no canal/conteúdo do Leandro Twin no YouTube;
-- layout responsivo para celular e computador.
+- painel diário com placar dos pilares de evolução;
+- ciclo de treino 4×1 com fichas A (peito e ombros), B (pernas e panturrilhas), C (costas e abdômen), D (braços e antebraço) e um dia de descanso;
+- séries, cargas, histórico e demonstrações humanas 3D para cada exercício;
+- diário de alimentação com metas de 2.300 kcal, 190 g de proteína, 205 g de carboidratos e 80 g de gorduras;
+- registro de peso com gráfico de tendência;
+- galeria privada de fotos do shape, com data, ângulo e comparação lado a lado;
+- acompanhamento de duração e qualidade do sono;
+- rotina pessoal de suplementação;
+- observações de saúde para apoiar conversas com profissionais;
+- dados sincronizados em armazenamento privado da Hostinger e layout responsivo para celular e computador.
 
-Os dados ficam no `localStorage` do navegador. Não há conta nem sincronização entre aparelhos.
+O navegador mantém um cache local para o uso cotidiano, mas o estado principal é sincronizado pelo `api.php`. As fotos do shape ficam fora de `public_html`, são entregues somente após a autenticação da Hostinger e nunca entram no GitHub. Fotos de refeições não são armazenadas: entram apenas descrição e estimativas nutricionais. O módulo de saúde organiza anotações pessoais e não substitui avaliação profissional.
 
 ## Executar localmente
 
-O projeto não exige compilação. Sirva esta pasta com qualquer servidor HTTP estático, por exemplo:
+O front-end não exige compilação. Para uma prévia visual sem sincronização, sirva esta pasta com qualquer servidor HTTP estático, por exemplo:
 
 ```bash
 npx serve .
@@ -31,6 +34,10 @@ O workflow `.github/workflows/deploy.yml` publica automaticamente cada atualiza�
 Os dados de acesso ficam protegidos nos secrets `FTP_SERVER`, `FTP_USERNAME` e `FTP_PASSWORD` do GitHub Actions e não fazem parte do repositório.
 
 O projeto usa caminhos relativos, portanto pode ser servido em `https://zeppen.com.br/projetozerao/` sem alterar os arquivos da raiz do domínio.
+
+Depois da primeira publicação, ative **Password Protect Directories** para `public_html/projetozerao`. Essa proteção é o login do portal e também bloqueia o acesso direto à API. O PHP cria automaticamente `zerao_private` acima de `public_html`; ali ficam `state.json`, o índice da galeria e os arquivos de imagem com permissões privadas.
+
+Não adicione senhas, arquivos `.htpasswd`, fotos ou o diretório privado ao repositório. A configuração da senha é feita apenas no painel da Hostinger.
 
 ## Dependência externa
 
