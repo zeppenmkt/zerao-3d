@@ -19,7 +19,7 @@
 
     <header class="hero hero-portal" id="inicio">
       <nav class="topbar" aria-label="Navegação principal">
-        <a class="brand" href="#/visao-geral" aria-label="ZERÃO — início"><span class="brand-mark">Z</span><span>ZERÃO</span></a>
+        <a class="brand" href="./" data-page-link="visao-geral" aria-label="ZERÃO — início"><span class="brand-mark">Z</span><span>ZERÃO</span></a>
         <div class="top-actions">
           <span class="local-badge" id="sync-badge"><i></i> Privado e sincronizado</span>
           <button class="history-button" id="open-history" type="button"><span aria-hidden="true">↗</span> Treinos</button>
@@ -52,8 +52,8 @@
 
     <nav class="module-nav" aria-label="Módulos do Zerão">
       <div>
-        <a href="#/visao-geral">Visão geral</a><a href="#/treino">Treino</a><a href="#/nutricao">Nutrição</a>
-        <a href="#/progresso">Progresso</a><a href="#/sono">Sono</a><a href="#/saude">Saúde</a>
+        <a href="./" data-page-link="visao-geral">Visão geral</a><a href="treino" data-page-link="treino">Treino</a><a href="nutricao" data-page-link="nutricao">Nutrição</a>
+        <a href="progresso" data-page-link="progresso">Progresso</a><a href="sono" data-page-link="sono">Sono</a><a href="saude" data-page-link="saude">Saúde</a>
       </div>
     </nav>
 
@@ -71,9 +71,9 @@
           <article class="today-card dashboard-card">
             <div class="card-title-row"><span class="card-label">Hoje</span><b id="today-label"></b></div>
             <button class="daily-task" data-check="water" type="button"><i>✓</i><span><b>Hidratação</b><small>Marque quando cumprir sua meta do dia</small></span></button>
-            <a class="daily-task derived" data-derived="nutrition" href="#/nutricao"><i>✓</i><span><b>Nutrição</b><small id="nutrition-task-copy">Nenhuma refeição registrada</small></span><em aria-hidden="true">→</em></a>
-            <a class="daily-task derived" data-derived="sleep" href="#/sono"><i>✓</i><span><b>Sono</b><small id="sleep-task-copy">Sono ainda não registrado</small></span><em aria-hidden="true">→</em></a>
-            <a class="daily-task derived" data-derived="workout" href="#/treino"><i>✓</i><span><b>Treino</b><small id="workout-task-copy">Treino ainda não iniciado</small></span><em aria-hidden="true">→</em></a>
+            <a class="daily-task derived" data-derived="nutrition" href="nutricao" data-page-link="nutricao"><i>✓</i><span><b>Nutrição</b><small id="nutrition-task-copy">Nenhuma refeição registrada</small></span><em aria-hidden="true">→</em></a>
+            <a class="daily-task derived" data-derived="sleep" href="sono" data-page-link="sono"><i>✓</i><span><b>Sono</b><small id="sleep-task-copy">Sono ainda não registrado</small></span><em aria-hidden="true">→</em></a>
+            <a class="daily-task derived" data-derived="workout" href="treino" data-page-link="treino"><i>✓</i><span><b>Treino</b><small id="workout-task-copy">Treino ainda não iniciado</small></span><em aria-hidden="true">→</em></a>
           </article>
           <article class="metrics-card dashboard-card">
             <span class="card-label">Indicadores rápidos</span>

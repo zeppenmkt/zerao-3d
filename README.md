@@ -38,6 +38,18 @@ Depois da primeira publicação, ative **Password Protect Directories** para `pu
 
 Não adicione senhas, arquivos `.htpasswd`, fotos ou o diretório privado ao repositório. A configuração da senha é feita apenas no painel da Hostinger.
 
+As páginas do portal têm endereço próprio (`/projetozerao/treino`, `/projetozerao/nutricao`…). Para que esses endereços abram direto, o `.htaccess` da pasta na Hostinger tem, depois do bloco de senha, estas regras:
+
+```apache
+RewriteEngine On
+RewriteBase /projetozerao/
+RewriteRule ^(visao-geral|treino|nutricao|progresso|sono|saude)/$ $1 [R=301,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(visao-geral|treino|nutricao|progresso|sono|saude)$ index.html [L]
+```
+
+O `.htaccess` não vai para o repositório porque guarda a proteção por senha. Se a proteção for recriada pelo painel, confira se as regras continuam no arquivo. Uma página nova do portal precisa entrar nas duas listas acima e em `pages.js`.
+
 ## Dependência externa
 
 O modelo 3D usa Three.js via jsDelivr. É necessária conexão com a internet para carregar a biblioteca 3D e as fontes/imagens de apresentação.
