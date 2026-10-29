@@ -65,6 +65,10 @@ function todayMeals() {
   return portalState.meals.filter((meal) => localDateKey(new Date(meal.createdAt)) === portalToday);
 }
 
+function mealTotal(meals, key) {
+  return meals.reduce((sum, meal) => sum + (Number(meal[key]) || 0), 0);
+}
+
 function todaySleep() {
   return portalState.sleeps.find((entry) => entry.date === portalToday);
 }
@@ -113,7 +117,7 @@ function renderMeals() {
 
 function renderNutritionTargets(meals) {
   Object.entries(NUTRITION_TARGETS).forEach(([key, target]) => {
-    const total = meals.reduce((sum, meal) => sum + (Number(meal[key]) || 0), 0);
+    const total = mealTotal(meals, key);
     const unit = key === "calories" ? "kcal" : "g";
     const label = document.querySelector(`#nutrition-${key}`);
     const bar = document.querySelector(`[data-nutrient="${key}"] u`);
@@ -192,10 +196,17 @@ function renderWeights() {
 
   const latest = entries.at(-1);
   const difference = Number(latest.value) - Number(entries[0].value);
+  const [year, month, day] = latest.date.split("-").map(Number);
+  const weekStart = localDateKey(new Date(year, month - 1, day - 6));
+  const week = entries.filter((entry) => entry.date >= weekStart);
+  const weekAverage = week.reduce((sum, entry) => sum + Number(entry.value), 0) / week.length;
+  const kg = (value) => value.toLocaleString("pt-BR", { maximumFractionDigits: 1 });
   document.querySelector("#weight-current").textContent = `${Number(latest.value).toLocaleString("pt-BR")} kg`;
   document.querySelector("#metric-weight").textContent = Number(latest.value).toLocaleString("pt-BR");
   document.querySelector("#weight-change").textContent =
-    entries.length === 1 ? "Primeiro ponto registrado" : `${difference > 0 ? "+" : ""}${difference.toLocaleString("pt-BR", { maximumFractionDigits: 1 })} kg no período`;
+    entries.length === 1
+      ? "Primeiro ponto registrado"
+      : `${difference > 0 ? "+" : ""}${kg(difference)} kg no período${week.length > 1 ? ` · média 7 dias: ${kg(weekAverage)} kg` : ""}`;
   document.querySelector("#chart-start").textContent = formatShortDate(entries[0].date);
   document.querySelector("#chart-end").textContent = formatShortDate(latest.date);
 }
@@ -263,9 +274,13 @@ function updateDashboard() {
   const workout = workoutNumbers();
   const supplements = supplementStatus();
   const water = Boolean(portalState.daily[portalToday].water);
+  const rest = Boolean(portalState.daily[portalToday].rest);
+  const protein = mealTotal(meals, "protein");
+  // Com proteína registrada, a meta conta; sem estimativas, vale a regularidade de 3 refeições.
+  const nutritionDone = protein > 0 ? protein >= NUTRITION_TARGETS.protein * 0.9 : meals.length >= 3;
   const pillars = {
-    workout: workout.done > 0,
-    nutrition: meals.length >= 3,
+    workout: workout.done > 0 || rest,
+    nutrition: nutritionDone,
     water,
     sleep: Boolean(sleep),
     supplements: supplements.done,
@@ -290,9 +305,17 @@ function updateDashboard() {
   document.querySelector('[data-derived="nutrition"]').classList.toggle("done", pillars.nutrition);
   document.querySelector('[data-derived="sleep"]').classList.toggle("done", pillars.sleep);
   document.querySelector('[data-derived="workout"]').classList.toggle("done", pillars.workout);
-  document.querySelector("#nutrition-task-copy").textContent = meals.length ? `${meals.length} ${meals.length === 1 ? "refeição registrada" : "refeições registradas"}` : "Nenhuma refeição registrada";
+  const mealCopy = `${meals.length} ${meals.length === 1 ? "refeição" : "refeições"}`;
+  document.querySelector("#nutrition-task-copy").textContent = !meals.length
+    ? "Nenhuma refeição registrada"
+    : protein > 0
+      ? `${mealCopy} · ${Math.round(protein)} de ${NUTRITION_TARGETS.protein} g de proteína`
+      : `${mealCopy} ${meals.length === 1 ? "registrada" : "registradas"}`;
   document.querySelector("#sleep-task-copy").textContent = sleep ? `${Number(sleep.hours).toLocaleString("pt-BR")} horas registradas` : "Sono ainda não registrado";
-  document.querySelector("#workout-task-copy").textContent = workout.done ? `${workout.done} de ${workout.total} séries concluídas` : "Treino ainda não iniciado";
+  document.querySelector("#workout-task-copy").textContent = workout.done ? `${workout.done} de ${workout.total} séries concluídas` : rest ? "Dia de descanso" : "Treino ainda não iniciado";
+  const restButton = document.querySelector("#rest-day");
+  restButton.classList.toggle("active", rest);
+  restButton.setAttribute("aria-pressed", String(rest));
   document.querySelector("#metric-workout").textContent = `${workout.done}/${workout.total || 28}`;
 }
 
@@ -310,6 +333,15 @@ document.querySelector("#today-label").textContent = new Intl.DateTimeFormat("pt
 document.querySelector("#weight-date").value = portalToday;
 document.querySelector("#health-date").value = portalToday;
 document.querySelector("#shape-date").value = portalToday;
+document.querySelector("#sleep-date").value = portalToday;
+document.querySelector("#sleep-date").max = portalToday;
+
+document.querySelector("#rest-day").addEventListener("click", () => {
+  portalState.daily[portalToday].rest = !portalState.daily[portalToday].rest;
+  savePortalState();
+  updateDashboard();
+  notifyPortal(portalState.daily[portalToday].rest ? "Descanso marcado. Recuperar também é treino." : "Descanso desmarcado.");
+});
 
 document.querySelector('[data-check="water"]').addEventListener("click", () => {
   portalState.daily[portalToday].water = !portalState.daily[portalToday].water;
@@ -429,11 +461,12 @@ document.querySelector("#sleep-form").addEventListener("submit", (event) => {
   const hours = Number(document.querySelector("#sleep-hours").value);
   const quality = Number(document.querySelector("#sleep-quality").value);
   const bedtime = document.querySelector("#sleep-time").value;
-  const existing = portalState.sleeps.find((entry) => entry.date === portalToday);
-  const record = { id: existing?.id ?? makeId(), date: portalToday, hours, quality, bedtime };
+  const date = document.querySelector("#sleep-date").value || portalToday;
+  const existing = portalState.sleeps.find((entry) => entry.date === date);
+  const record = { id: existing?.id ?? makeId(), date, hours, quality, bedtime };
   if (existing) Object.assign(existing, record);
   else portalState.sleeps.push(record);
-  portalState.sleeps = portalState.sleeps.slice(-90);
+  portalState.sleeps = portalState.sleeps.sort((a, b) => a.date.localeCompare(b.date)).slice(-90);
   savePortalState();
   renderSleep();
   updateDashboard();
@@ -481,7 +514,7 @@ document.querySelector("#health-form").addEventListener("submit", (event) => {
   savePortalState();
   document.querySelector("#health-note").value = "";
   renderHealthNotes();
-  notifyPortal("Observação de saúde salva neste aparelho.");
+  notifyPortal("Observação de saúde salva.");
 });
 
 document.querySelector("#health-list").addEventListener("click", (event) => {
@@ -506,5 +539,14 @@ const sectionObserver = new IntersectionObserver(
   { rootMargin: "-20% 0px -65%", threshold: [0.05, 0.25] },
 );
 observedSections.forEach((section) => sectionObserver.observe(section));
+
+// Aba aberta desde ontem: recarrega para o "hoje" valer de novo (sem interromper quem está digitando).
+function reloadOnNewDay() {
+  if (document.visibilityState !== "visible" || localDateKey() === portalToday) return;
+  if (document.activeElement?.matches("input, textarea, select")) return;
+  window.location.reload();
+}
+document.addEventListener("visibilitychange", reloadOnNewDay);
+window.setInterval(reloadOnNewDay, 60_000);
 
 renderPortal();

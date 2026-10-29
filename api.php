@@ -89,18 +89,41 @@ if ($action === 'status' && $method === 'GET') {
     json_response(['authenticated' => true]);
 }
 
+function read_state_record(string $path): array
+{
+    $stored = read_json_file($path, []);
+    // Formato anterior guardava o estado direto, sem revisão.
+    if (!array_key_exists('state', $stored)) return ['rev' => 0, 'state' => $stored];
+    return ['rev' => (int) ($stored['rev'] ?? 0), 'state' => is_array($stored['state']) ? $stored['state'] : []];
+}
+
 if ($action === 'state' && $method === 'GET') {
-    json_response(['state' => read_json_file($stateFile, [])]);
+    $record = read_state_record($stateFile);
+    json_response(['state' => $record['state'], 'rev' => $record['rev']]);
 }
 
 if ($action === 'state' && $method === 'PUT') {
     $raw = file_get_contents('php://input');
     if ($raw === false || strlen($raw) > 2_000_000) json_response(['error' => 'Dados acima do limite permitido.'], 413);
-    $state = json_decode($raw, true);
-    if (!is_array($state)) json_response(['error' => 'Dados inválidos.'], 422);
-    $allowed = array_intersect_key($state, array_flip(['portal', 'workout', 'history']));
-    write_json_file($stateFile, $allowed);
-    json_response(['saved' => true]);
+    $payload = json_decode($raw, true);
+    if (!is_array($payload) || !is_array($payload['state'] ?? null) || !is_int($payload['baseRev'] ?? null)) {
+        json_response(['error' => 'Versão antiga do portal. Recarregue a página.'], 409);
+    }
+
+    $lock = fopen($stateFile . '.lock', 'c');
+    if (!$lock || !flock($lock, LOCK_EX)) json_response(['error' => 'Não foi possível salvar os dados.'], 500);
+    $record = read_state_record($stateFile);
+    if ($payload['baseRev'] !== $record['rev']) {
+        flock($lock, LOCK_UN);
+        fclose($lock);
+        json_response(['error' => 'Há alterações mais recentes de outro aparelho.', 'state' => $record['state'], 'rev' => $record['rev']], 409);
+    }
+    $allowed = array_intersect_key($payload['state'], array_flip(['portal', 'workout', 'history']));
+    $rev = $record['rev'] + 1;
+    write_json_file($stateFile, ['rev' => $rev, 'updatedAt' => gmdate('c'), 'state' => $allowed]);
+    flock($lock, LOCK_UN);
+    fclose($lock);
+    json_response(['saved' => true, 'rev' => $rev]);
 }
 
 if ($action === 'shapes' && $method === 'GET') {

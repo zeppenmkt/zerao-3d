@@ -2498,3 +2498,90 @@ input[type="range"] {
     grid-template-columns: 54px 1fr 20px;
   }
 }
+
+/* Descanso, última carga e evolução de carga */
+button.cycle-rest {
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+button.cycle-rest:hover {
+  border-color: #565b65;
+  color: white;
+}
+
+button.cycle-rest.active {
+  border-style: solid;
+  border-color: var(--sun);
+  color: white;
+}
+
+button.cycle-rest.active span {
+  border-color: var(--sun);
+  background: var(--sun);
+  color: #080a0f;
+}
+
+.exercise-name .last-load {
+  margin-top: 5px;
+  color: #8c9099;
+  font-size: 0.72rem;
+}
+
+.exercise-name .last-load b {
+  color: var(--sun);
+  font-weight: 700;
+}
+
+.load-history {
+  border-top: 1px solid var(--line);
+  padding: 18px 0;
+}
+
+.load-history > span {
+  color: var(--sun);
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  font-size: 0.63rem;
+  font-weight: 800;
+}
+
+.load-history ol {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.load-history li {
+  display: grid;
+  grid-template-columns: 52px 1fr 64px;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.78rem;
+}
+
+.load-history small {
+  color: var(--muted);
+}
+
+.load-history i {
+  height: 6px;
+  border-radius: 999px;
+  background: #22262f;
+  overflow: hidden;
+}
+
+.load-history u {
+  display: block;
+  height: 100%;
+  background: var(--sun);
+}
+
+.load-history b {
+  text-align: right;
+  color: #d9dade;
+}

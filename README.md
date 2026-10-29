@@ -15,7 +15,7 @@ Portal pessoal de evolução integral do Zé. O projeto combina treino, alimenta
 - observações de saúde para apoiar conversas com profissionais;
 - dados sincronizados em armazenamento privado da Hostinger e layout responsivo para celular e computador.
 
-O navegador mantém um cache local para o uso cotidiano, mas o estado principal é sincronizado pelo `api.php`. As fotos do shape ficam fora de `public_html`, são entregues somente após a autenticação da Hostinger e nunca entram no GitHub. Fotos de refeições não são armazenadas: entram apenas descrição e estimativas nutricionais. O módulo de saúde organiza anotações pessoais e não substitui avaliação profissional.
+O navegador mantém um cache local para o uso cotidiano, mas o estado principal é sincronizado pelo `api.php`. Cada gravação informa a revisão em que se baseou; se outro aparelho salvou antes, o `sync.js` mescla as duas versões registro a registro em vez de sobrescrever. As fotos do shape ficam fora de `public_html`, são entregues somente após a autenticação da Hostinger e nunca entram no GitHub. Fotos de refeições não são armazenadas: entram apenas descrição e estimativas nutricionais. O módulo de saúde organiza anotações pessoais e não substitui avaliação profissional.
 
 ## Executar localmente
 

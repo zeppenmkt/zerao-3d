@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261029-2" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="noise" aria-hidden="true"></div>
@@ -102,7 +102,7 @@
           <i aria-hidden="true">→</i>
           <button type="button" data-workout="D" aria-pressed="false"><span>D</span><b>Braços + antebraço</b></button>
           <i aria-hidden="true">→</i>
-          <div class="cycle-rest"><span>R</span><b>Descanso</b></div>
+          <button class="cycle-rest" id="rest-day" type="button" aria-pressed="false"><span>R</span><b>Descanso hoje</b></button>
         </div>
         <div class="progress-panel workout-progress" aria-live="polite">
           <div class="progress-copy"><span>Progresso deste treino</span><strong id="progress-percent">0%</strong></div>
@@ -199,6 +199,7 @@
         <div class="split-layout sleep-layout">
           <form class="entry-card" id="sleep-form">
             <span class="card-label">Registrar noite</span>
+            <label>Noite que terminou em<input id="sleep-date" type="date" required /></label>
             <label>Horas dormidas<div class="field-with-unit"><input id="sleep-hours" type="number" min="0" max="16" step="0.1" inputmode="decimal" placeholder="7,5" required /><b>h</b></div></label>
             <label>Horário em que deitou<input id="sleep-time" type="time" /></label>
             <label>Qualidade percebida <span id="sleep-quality-label">3 · razoável</span><input id="sleep-quality" type="range" min="1" max="5" value="3" /></label>
@@ -266,7 +267,7 @@
         </div>
         <div class="movement-copy">
           <span class="modal-index" id="modal-index">01</span><h2 id="modal-title">Agachamento livre</h2><p id="modal-prescription">4 séries · 8–10 repetições</p>
-          <div class="cue-box"><span>Execução</span><p id="modal-cue"></p></div><div class="warning-box"><span>!</span><p>Modelo visual simplificado. Ajuste a técnica com um profissional de educação física.</p></div>
+          <div class="cue-box"><span>Execução</span><p id="modal-cue"></p></div><div class="load-history" id="modal-loads" hidden></div><div class="warning-box"><span>!</span><p>Modelo visual simplificado. Ajuste a técnica com um profissional de educação física.</p></div>
           <button class="play-button" id="toggle-animation" type="button"><span id="play-icon">Ⅱ</span> <b id="play-label">Pausar animação</b></button>
           <a class="youtube-button" id="youtube-link" href="#" target="_blank" rel="noopener noreferrer"><span class="youtube-icon">▶</span>Ver Leandro Twin no YouTube<span>↗</span></a>
         </div>
@@ -280,6 +281,6 @@
     </dialog>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js" defer></script><script src="sync.js?v=20261029-2" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js" defer></script><script src="sync.js" defer></script>
   </body>
 </html>

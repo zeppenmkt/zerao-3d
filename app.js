@@ -55,6 +55,7 @@ const workouts = {
 
 const STORAGE_KEY = "zerao-workout-v3";
 const HISTORY_KEY = "zerao-history-v2";
+const HISTORY_LIMIT = 200;
 const state = loadState();
 let selectedWorkoutId = state.selectedWorkoutId && workouts[state.selectedWorkoutId] ? state.selectedWorkoutId : "A";
 let currentExercise = null;
@@ -103,6 +104,72 @@ function getHistory() {
   }
 }
 
+function saveHistory(history) {
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, HISTORY_LIMIT)));
+  window.zeraoSync?.schedule();
+}
+
+function dayKey(date = new Date()) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function hasLoad(value) {
+  return value !== "" && value !== null && value !== undefined;
+}
+
+function formatLoad(value) {
+  return hasLoad(value) ? Number(value).toLocaleString("pt-BR") : "–";
+}
+
+function formatHistoryDay(isoDate) {
+  return new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short" }).format(new Date(isoDate)).replace(".", "");
+}
+
+function loadHistory(exerciseId) {
+  return getHistory().filter((entry) => entry.loads?.[exerciseId]?.some(hasLoad));
+}
+
+function sessionSummary(workoutId) {
+  const workout = workouts[workoutId];
+  const saved = state.workouts?.[workoutId] ?? {};
+  let done = 0;
+  const loads = {};
+  workout.exercises.forEach((exercise) => {
+    const sets = saved[exercise.id] ?? {};
+    done += Array.from({ length: exercise.sets }, (_, i) => sets[i]?.done).filter(Boolean).length;
+    loads[exercise.id] = Array.from({ length: exercise.sets }, (_, i) => sets[i]?.load ?? "");
+  });
+  const total = workout.exercises.reduce((sum, exercise) => sum + exercise.sets, 0);
+  return { done, total, loads };
+}
+
+function clearSessionChecks(workoutId) {
+  workouts[workoutId].exercises.forEach((exercise) => {
+    const saved = state.workouts?.[workoutId]?.[exercise.id];
+    if (!saved) return;
+    for (let i = 0; i < exercise.sets; i += 1) {
+      if (saved[i]) saved[i] = { ...saved[i], done: false };
+    }
+  });
+}
+
+// Séries marcadas em outro dia sem "Concluir treino" viram registro daquele dia, e o treino de hoje começa zerado.
+function archiveStaleSession() {
+  if (!state.activeDate || state.activeDate === dayKey()) return;
+  const history = getHistory();
+  Object.keys(state.workouts ?? {}).forEach((workoutId) => {
+    if (!workouts[workoutId]) return;
+    const summary = sessionSummary(workoutId);
+    if (!summary.done) return;
+    history.push({ date: new Date(`${state.activeDate}T12:00:00`).toISOString(), workoutId, workoutTitle: workouts[workoutId].title, ...summary, auto: true });
+    clearSessionChecks(workoutId);
+  });
+  history.sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  delete state.activeDate;
+  saveHistory(history);
+  saveState();
+}
+
 function createExerciseCard(exercise, index) {
   const article = document.createElement("article");
   article.className = "exercise-card";
@@ -137,11 +204,15 @@ function createExerciseCard(exercise, index) {
     `;
   }).join("");
 
+  const last = loadHistory(exercise.id)[0];
+  const lastCopy = last ? `<p class="last-load">Última: <b>${last.loads[exercise.id].map(formatLoad).join(" · ")} kg</b> · ${formatHistoryDay(last.date)}</p>` : "";
+
   article.innerHTML = `
     <span class="exercise-number">${String(index + 1).padStart(2, "0")}</span>
     <div class="exercise-name">
       <h3>${exercise.name}</h3>
       <p>${exercise.sets} séries · ${exercise.reps}</p>
+      ${lastCopy}
     </div>
     <div class="set-row">${sets}</div>
     <button class="movement-button" type="button" data-movement="${exercise.id}">▶ Ver movimento 3D</button>
@@ -191,6 +262,7 @@ function updateProgress() {
 function updateSet(exerciseId, setIndex, patch) {
   const saved = exerciseState(exerciseId);
   saved[setIndex] = { ...saved[setIndex], ...patch };
+  if (patch.done) state.activeDate = dayKey();
   saveState();
   updateProgress();
 }
@@ -203,12 +275,25 @@ function openMovement(exerciseId) {
   document.querySelector("#modal-title").textContent = currentExercise.name;
   document.querySelector("#modal-prescription").textContent = `${currentExercise.sets} séries · ${currentExercise.reps}`;
   document.querySelector("#modal-cue").textContent = currentExercise.cue;
+  renderLoadHistory(currentExercise);
   document.querySelector("#youtube-link").href = `https://www.youtube.com/results?search_query=${encodeURIComponent(`Leandro Twin ${currentExercise.name} execução`)}`;
   document.querySelector("#play-icon").textContent = "Ⅱ";
   document.querySelector("#play-label").textContent = "Pausar animação";
   movementModal.showModal();
   document.body.style.overflow = "hidden";
   requestAnimationFrame(() => humanViewer.open(currentExercise.animation));
+}
+
+function renderLoadHistory(exercise) {
+  const container = document.querySelector("#modal-loads");
+  const sessions = loadHistory(exercise.id).slice(0, 6);
+  container.hidden = !sessions.length;
+  if (!sessions.length) return;
+  const peaks = sessions.map((entry) => Math.max(...entry.loads[exercise.id].filter(hasLoad).map(Number)));
+  const highest = Math.max(...peaks);
+  container.innerHTML = `<span>Evolução de carga</span><ol>${sessions
+    .map((entry, i) => `<li><small>${formatHistoryDay(entry.date)}</small><i><u style="width:${highest ? Math.round((peaks[i] / highest) * 100) : 0}%"></u></i><b>${formatLoad(peaks[i])} kg</b></li>`)
+    .join("")}</ol>`;
 }
 
 function closeMovement() {
@@ -231,23 +316,13 @@ function finishWorkout() {
     showToast("Marque pelo menos uma série antes de concluir.");
     return;
   }
-  const total = totalSets();
+  const { total, loads } = sessionSummary(selectedWorkoutId);
   const history = getHistory();
-  const loads = {};
-  currentExercises().forEach((exercise) => {
-    const saved = exerciseState(exercise.id);
-    loads[exercise.id] = Array.from({ length: exercise.sets }, (_, i) => saved[i]?.load ?? "");
-  });
   history.unshift({ date: new Date().toISOString(), workoutId: selectedWorkoutId, workoutTitle: currentWorkout().title, done, total, loads });
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, 30)));
-  window.zeraoSync?.schedule();
+  saveHistory(history);
 
-  currentExercises().forEach((exercise) => {
-    const saved = exerciseState(exercise.id);
-    for (let i = 0; i < exercise.sets; i += 1) {
-      saved[i] = { ...saved[i], done: false };
-    }
-  });
+  clearSessionChecks(selectedWorkoutId);
+  if (!Object.keys(workouts).some((workoutId) => sessionSummary(workoutId).done)) delete state.activeDate;
   saveState();
   renderExercises();
   showToast(done === total ? "Treino completo registrado. Aí sim!" : `Treino registrado com ${done} de ${total} séries.`);
@@ -330,8 +405,7 @@ document.querySelector("#close-history").addEventListener("click", () => {
 document.querySelector("#clear-history").addEventListener("click", () => {
   if (!getHistory().length) return;
   if (window.confirm("Apagar todo o histórico de treinos deste navegador?")) {
-    localStorage.removeItem(HISTORY_KEY);
-    window.zeraoSync?.schedule();
+    saveHistory([]);
     renderHistory();
     showToast("Histórico apagado.");
   }
@@ -779,4 +853,5 @@ const humanViewer = (() => {
   return { open, close, toggle };
 })();
 
+archiveStaleSession();
 renderExercises();
