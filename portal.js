@@ -69,6 +69,19 @@ function mealTotal(meals, key) {
   return meals.reduce((sum, meal) => sum + (Number(meal[key]) || 0), 0);
 }
 
+// Refeições do dia + doses de suplemento marcadas: tudo soma na mesma meta de macros.
+function todayIntake() {
+  const checked = portalState.daily[portalToday].supplements;
+  return [...todayMeals(), ...portalState.supplements.filter((item) => checked[item.id])];
+}
+
+function macroCopy(source) {
+  return [
+    source.calories ? `${Number(source.calories).toLocaleString("pt-BR")} kcal` : "",
+    source.protein ? `${Number(source.protein).toLocaleString("pt-BR")} g prot.` : "",
+  ].filter(Boolean).join(" · ");
+}
+
 function todaySleep() {
   return portalState.sleeps.find((entry) => entry.date === portalToday);
 }
@@ -91,7 +104,7 @@ function renderMeals() {
   const list = document.querySelector("#meal-list");
   document.querySelector("#meal-count").textContent = `${meals.length} ${meals.length === 1 ? "registro" : "registros"}`;
   document.querySelector("#metric-meals").textContent = meals.length;
-  renderNutritionTargets(meals);
+  renderNutritionTargets(todayIntake());
 
   if (!meals.length) {
     list.innerHTML = '<div class="empty-state"><b>Seu prato ainda está vazio por aqui.</b><span>Registre a primeira refeição do dia.</span></div>';
@@ -101,10 +114,7 @@ function renderMeals() {
   list.innerHTML = meals
     .map((meal) => {
       const time = new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit" }).format(new Date(meal.createdAt));
-      const macros = [
-        meal.calories ? `${Number(meal.calories).toLocaleString("pt-BR")} kcal` : "",
-        meal.protein ? `${Number(meal.protein).toLocaleString("pt-BR")} g prot.` : "",
-      ].filter(Boolean).join(" · ");
+      const macros = macroCopy(meal);
       return `<article class="log-entry">
         <span class="entry-time">${time}</span>
         <div><strong>${escapeMarkup(meal.type)}</strong><p>${escapeMarkup(meal.description)}</p></div>
@@ -115,9 +125,9 @@ function renderMeals() {
     .join("");
 }
 
-function renderNutritionTargets(meals) {
+function renderNutritionTargets(sources) {
   Object.entries(NUTRITION_TARGETS).forEach(([key, target]) => {
-    const total = mealTotal(meals, key);
+    const total = mealTotal(sources, key);
     const unit = key === "calories" ? "kcal" : "g";
     const label = document.querySelector(`#nutrition-${key}`);
     const bar = document.querySelector(`[data-nutrient="${key}"] u`);
@@ -246,7 +256,7 @@ function renderSupplements() {
 
   list.innerHTML = portalState.supplements
     .map((item) => `<article class="supplement-item ${checked[item.id] ? "done" : ""}">
-      <label><input type="checkbox" data-supplement-check="${escapeMarkup(item.id)}" ${checked[item.id] ? "checked" : ""} /><i>✓</i><span><strong>${escapeMarkup(item.name)}</strong><small>${escapeMarkup(item.instruction || "Sem horário informado")}</small></span></label>
+      <label><input type="checkbox" data-supplement-check="${escapeMarkup(item.id)}" ${checked[item.id] ? "checked" : ""} /><i>✓</i><span><strong>${escapeMarkup(item.name)}</strong><small>${escapeMarkup([item.instruction || "Sem horário informado", macroCopy(item)].filter(Boolean).join(" · "))}</small></span></label>
       <button type="button" data-remove-supplement="${escapeMarkup(item.id)}" aria-label="Remover suplemento">×</button>
     </article>`)
     .join("");
@@ -275,18 +285,18 @@ function updateDashboard() {
   const supplements = supplementStatus();
   const water = Boolean(portalState.daily[portalToday].water);
   const rest = Boolean(portalState.daily[portalToday].rest);
-  const protein = mealTotal(meals, "protein");
-  // Com proteína registrada, a meta conta; sem estimativas, vale a regularidade de 3 refeições.
-  const nutritionDone = protein > 0 ? protein >= NUTRITION_TARGETS.protein * 0.9 : meals.length >= 3;
+  const sessions = getHistory().filter((entry) => entryDay(entry) === portalToday);
+  const protein = mealTotal(todayIntake(), "protein");
+  // Com proteína registrada, a meta conta; sem estimativas, vale a regularidade de 3 refeições. Suplementos cadastrados precisam ser tomados.
+  const foodDone = protein > 0 ? protein >= NUTRITION_TARGETS.protein * 0.9 : meals.length >= 3;
   const pillars = {
-    workout: workout.done > 0 || rest,
-    nutrition: nutritionDone,
+    workout: workout.done > 0 || sessions.length > 0 || rest,
+    nutrition: foodDone && (!supplements.applicable || supplements.done),
     water,
     sleep: Boolean(sleep),
-    supplements: supplements.done,
   };
 
-  const activeKeys = supplements.applicable ? Object.keys(pillars) : Object.keys(pillars).filter((key) => key !== "supplements");
+  const activeKeys = Object.keys(pillars);
   const completed = activeKeys.filter((key) => pillars[key]).length;
   const score = Math.round((completed / activeKeys.length) * 100);
 
@@ -298,24 +308,25 @@ function updateDashboard() {
   Object.entries(pillars).forEach(([key, done]) => {
     const element = document.querySelector(`[data-pillar="${key}"]`);
     element?.classList.toggle("done", done);
-    element?.classList.toggle("not-applicable", key === "supplements" && !supplements.applicable);
   });
 
   document.querySelector('[data-check="water"]').classList.toggle("done", water);
   document.querySelector('[data-derived="nutrition"]').classList.toggle("done", pillars.nutrition);
   document.querySelector('[data-derived="sleep"]').classList.toggle("done", pillars.sleep);
   document.querySelector('[data-derived="workout"]').classList.toggle("done", pillars.workout);
-  const mealCopy = `${meals.length} ${meals.length === 1 ? "refeição" : "refeições"}`;
-  document.querySelector("#nutrition-task-copy").textContent = !meals.length
-    ? "Nenhuma refeição registrada"
-    : protein > 0
-      ? `${mealCopy} · ${Math.round(protein)} de ${NUTRITION_TARGETS.protein} g de proteína`
-      : `${mealCopy} ${meals.length === 1 ? "registrada" : "registradas"}`;
+  const nutritionParts = [
+    meals.length ? `${meals.length} ${meals.length === 1 ? "refeição" : "refeições"}` : "",
+    supplements.applicable ? `${supplements.count}/${portalState.supplements.length} suplementos` : "",
+    protein > 0 ? `${Math.round(protein)} de ${NUTRITION_TARGETS.protein} g de proteína` : "",
+  ].filter(Boolean);
+  document.querySelector("#nutrition-task-copy").textContent = nutritionParts.length ? nutritionParts.join(" · ") : "Nada registrado ainda";
   document.querySelector("#sleep-task-copy").textContent = sleep ? `${Number(sleep.hours).toLocaleString("pt-BR")} horas registradas` : "Sono ainda não registrado";
-  document.querySelector("#workout-task-copy").textContent = workout.done ? `${workout.done} de ${workout.total} séries concluídas` : rest ? "Dia de descanso" : "Treino ainda não iniciado";
-  const restButton = document.querySelector("#rest-day");
-  restButton.classList.toggle("active", rest);
-  restButton.setAttribute("aria-pressed", String(rest));
+  const sessionNames = sessions.map((entry) => (entry.workoutId === "CARDIO" ? `cardio ${entry.minutes} min` : `treino ${entry.workoutId}`));
+  document.querySelector("#workout-task-copy").textContent = workout.done
+    ? `${workout.done} de ${workout.total} séries concluídas`
+    : sessionNames.length
+      ? `Registrado: ${sessionNames.join(" + ")}`
+      : rest ? "Dia de descanso" : "Treino ainda não iniciado";
   document.querySelector("#metric-workout").textContent = `${workout.done}/${workout.total || 28}`;
 }
 
@@ -325,6 +336,7 @@ function renderPortal() {
   renderSleep();
   renderSupplements();
   renderHealthNotes();
+  renderRestPanel();
   updateDashboard();
   renderShapes();
 }
@@ -336,12 +348,24 @@ document.querySelector("#shape-date").value = portalToday;
 document.querySelector("#sleep-date").value = portalToday;
 document.querySelector("#sleep-date").max = portalToday;
 
-document.querySelector("#rest-day").addEventListener("click", () => {
-  portalState.daily[portalToday].rest = !portalState.daily[portalToday].rest;
+// O descanso vale para a data escolhida no treino, então dá para marcar o de ontem.
+function renderRestPanel() {
+  const day = document.querySelector("#session-date").value || portalToday;
+  const rest = Boolean(portalState.daily[day]?.rest);
+  const label = relativeDay(day);
+  document.querySelector("#rest-toggle").innerHTML = rest ? `Descanso de ${escapeMarkup(label)} marcado ✓ <span>×</span>` : `Marcar descanso de ${escapeMarkup(label)} <span>→</span>`;
+}
+
+document.querySelector("#rest-toggle").addEventListener("click", () => {
+  const day = document.querySelector("#session-date").value || portalToday;
+  portalState.daily[day] ??= { water: false, supplements: {} };
+  portalState.daily[day].rest = !portalState.daily[day].rest;
   savePortalState();
-  updateDashboard();
-  notifyPortal(portalState.daily[portalToday].rest ? "Descanso marcado. Recuperar também é treino." : "Descanso desmarcado.");
+  renderExercises();
+  notifyPortal(portalState.daily[day].rest ? "Descanso marcado. Recuperar também é treino." : "Descanso desmarcado.");
 });
+
+document.querySelector("#session-date").addEventListener("change", renderRestPanel);
 
 document.querySelector('[data-check="water"]').addEventListener("click", () => {
   portalState.daily[portalToday].water = !portalState.daily[portalToday].water;
@@ -477,10 +501,19 @@ document.querySelector("#supplement-form").addEventListener("submit", (event) =>
   event.preventDefault();
   const name = document.querySelector("#supplement-name").value.trim();
   if (!name) return;
-  portalState.supplements.push({ id: makeId(), name, instruction: document.querySelector("#supplement-instruction").value.trim() });
+  portalState.supplements.push({
+    id: makeId(),
+    name,
+    instruction: document.querySelector("#supplement-instruction").value.trim(),
+    calories: document.querySelector("#supplement-calories").value,
+    protein: document.querySelector("#supplement-protein").value,
+    carbs: document.querySelector("#supplement-carbs").value,
+    fat: document.querySelector("#supplement-fat").value,
+  });
   savePortalState();
   event.currentTarget.reset();
   renderSupplements();
+  renderMeals();
   updateDashboard();
   notifyPortal("Item adicionado à rotina.");
 });
@@ -491,6 +524,7 @@ document.querySelector("#supplement-list").addEventListener("change", (event) =>
   portalState.daily[portalToday].supplements[input.dataset.supplementCheck] = input.checked;
   savePortalState();
   renderSupplements();
+  renderMeals();
   updateDashboard();
 });
 
@@ -501,6 +535,7 @@ document.querySelector("#supplement-list").addEventListener("click", (event) => 
   delete portalState.daily[portalToday].supplements[button.dataset.removeSupplement];
   savePortalState();
   renderSupplements();
+  renderMeals();
   updateDashboard();
 });
 

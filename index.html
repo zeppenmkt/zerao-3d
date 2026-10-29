@@ -7,7 +7,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <meta name="description" content="ZERÃO. Do Zero ao Zé no Verão — treino, alimentação, peso, sono, suplementação, saúde e evolução do shape." />
+    <meta name="description" content="ZERÃO. Do Zero ao Zé no Verão — treino, nutrição, peso, sono, saúde e evolução do shape." />
     <title>ZERÃO — Do Zero ao Zé no Verão</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -31,7 +31,7 @@
         <h1>ZERÃO.<br /><em>DO ZERO AO ZÉ<br />NO VERÃO.</em></h1>
         <p>Treino, alimentação, descanso e saúde trabalhando juntos. Sem milagre: evolução registrada, um dia de cada vez.</p>
         <div class="hero-pills" aria-label="Áreas acompanhadas">
-          <span>Treino</span><span>Alimentação</span><span>Peso</span><span>Shape</span><span>Sono</span><span>Saúde</span>
+          <span>Treino</span><span>Nutrição</span><span>Peso</span><span>Shape</span><span>Sono</span><span>Saúde</span>
         </div>
       </div>
 
@@ -43,18 +43,17 @@
         <div class="overall-track" aria-hidden="true"><div id="overall-bar"></div></div>
         <div class="pillar-row">
           <span data-pillar="workout"><i></i> Treino</span>
-          <span data-pillar="nutrition"><i></i> Alimentação</span>
+          <span data-pillar="nutrition"><i></i> Nutrição</span>
           <span data-pillar="water"><i></i> Água</span>
           <span data-pillar="sleep"><i></i> Sono</span>
-          <span data-pillar="supplements"><i></i> Suplementos</span>
         </div>
       </div>
     </header>
 
     <nav class="module-nav" aria-label="Módulos do Zerão">
       <div>
-        <a href="#visao-geral">Visão geral</a><a href="#treino">Treino</a><a href="#alimentacao">Alimentação</a>
-        <a href="#progresso">Progresso</a><a href="#shape">Fotos do shape</a><a href="#sono">Sono</a><a href="#suplementacao">Suplementação</a><a href="#saude">Saúde</a>
+        <a href="#visao-geral">Visão geral</a><a href="#treino">Treino</a><a href="#nutricao">Nutrição</a>
+        <a href="#progresso">Progresso</a><a href="#shape">Fotos do shape</a><a href="#sono">Sono</a><a href="#saude">Saúde</a>
       </div>
     </nav>
 
@@ -72,7 +71,7 @@
           <article class="today-card dashboard-card">
             <div class="card-title-row"><span class="card-label">Hoje</span><b id="today-label"></b></div>
             <button class="daily-task" data-check="water" type="button"><i>✓</i><span><b>Hidratação</b><small>Marque quando cumprir sua meta do dia</small></span></button>
-            <div class="daily-task derived" data-derived="nutrition"><i>✓</i><span><b>Alimentação</b><small id="nutrition-task-copy">Nenhuma refeição registrada</small></span></div>
+            <div class="daily-task derived" data-derived="nutrition"><i>✓</i><span><b>Nutrição</b><small id="nutrition-task-copy">Nenhuma refeição registrada</small></span></div>
             <div class="daily-task derived" data-derived="sleep"><i>✓</i><span><b>Sono</b><small id="sleep-task-copy">Sono ainda não registrado</small></span></div>
             <div class="daily-task derived" data-derived="workout"><i>✓</i><span><b>Treino</b><small id="workout-task-copy">Treino ainda não iniciado</small></span></div>
           </article>
@@ -90,36 +89,53 @@
 
       <section class="workout-section module-section" id="treino" aria-labelledby="workout-title">
         <div class="section-heading">
-          <div><span class="section-number">01</span><div><p class="section-kicker">Ciclo interativo 4×1</p><h2 id="workout-title">TREINO A — PEITO + OMBROS</h2></div></div>
+          <div><span class="section-number">01</span><div><p class="section-kicker">Ciclo sugerido A → B → C → D → descanso</p><h2 id="workout-title">TREINO A — PEITO + OMBROS</h2></div></div>
           <p id="workout-description">Peitoral superior, peitoral geral e deltoides. Marque as séries, registre as cargas e consulte cada movimento em 3D.</p>
         </div>
-        <div class="workout-selector" id="workout-selector" aria-label="Escolha o treino do ciclo">
-          <button class="active" type="button" data-workout="A" aria-pressed="true"><span>A</span><b>Peito + ombros</b></button>
-          <i aria-hidden="true">→</i>
+        <div class="session-bar">
+          <label>Data do treino<input id="session-date" type="date" required /></label>
+          <p id="session-hint"></p>
+        </div>
+        <div class="workout-selector" id="workout-selector" aria-label="Escolha o treino">
+          <button type="button" data-workout="A" aria-pressed="false"><span>A</span><b>Peito + ombros</b></button>
           <button type="button" data-workout="B" aria-pressed="false"><span>B</span><b>Pernas + panturrilhas</b></button>
-          <i aria-hidden="true">→</i>
           <button type="button" data-workout="C" aria-pressed="false"><span>C</span><b>Costas + abdômen</b></button>
-          <i aria-hidden="true">→</i>
           <button type="button" data-workout="D" aria-pressed="false"><span>D</span><b>Braços + antebraço</b></button>
-          <i aria-hidden="true">→</i>
-          <button class="cycle-rest" id="rest-day" type="button" aria-pressed="false"><span>R</span><b>Descanso hoje</b></button>
+          <button type="button" data-workout="CARDIO" aria-pressed="false"><span>♥</span><b>Cardio</b></button>
+          <button type="button" data-workout="R" aria-pressed="false"><span>R</span><b>Descanso</b></button>
         </div>
-        <div class="progress-panel workout-progress" aria-live="polite">
-          <div class="progress-copy"><span>Progresso deste treino</span><strong id="progress-percent">0%</strong></div>
-          <div class="progress-track" aria-hidden="true"><div id="progress-bar"></div></div>
-          <div class="progress-meta"><span><b id="completed-sets">0</b> de <b id="total-sets">0</b> séries</span><span id="progress-message">Começa no seu ritmo.</span></div>
+        <div id="strength-panel">
+          <div class="progress-panel workout-progress" aria-live="polite">
+            <div class="progress-copy"><span>Progresso deste treino</span><strong id="progress-percent">0%</strong></div>
+            <div class="progress-track" aria-hidden="true"><div id="progress-bar"></div></div>
+            <div class="progress-meta"><span><b id="completed-sets">0</b> de <b id="total-sets">0</b> séries</span><span id="progress-message">Começa no seu ritmo.</span></div>
+          </div>
+          <div class="exercise-list" id="exercise-list"></div>
+          <div class="finish-card">
+            <div><span class="finish-kicker">Fechou o treino?</span><h2>REGISTRA ESSA VITÓRIA.</h2></div>
+            <button id="finish-workout" type="button">Concluir treino <span>→</span></button>
+          </div>
         </div>
-        <div class="exercise-list" id="exercise-list"></div>
-        <div class="finish-card">
-          <div><span class="finish-kicker">Fechou o treino?</span><h2>REGISTRA ESSA VITÓRIA.</h2></div>
-          <button id="finish-workout" type="button">Concluir treino <span>→</span></button>
+        <form class="entry-card cardio-form" id="cardio-panel" hidden>
+          <span class="card-label">Registrar cardio</span>
+          <div class="cardio-fields">
+            <label>Modalidade<select id="cardio-type"><option>Esteira</option><option>Bicicleta</option><option>Elíptico</option><option>Escada</option><option>Corrida na rua</option><option>Caminhada</option><option>Natação</option><option>Outro</option></select></label>
+            <label>Duração<div class="field-with-unit"><input id="cardio-minutes" type="number" min="1" max="600" inputmode="numeric" placeholder="30" required /><b>min</b></div></label>
+            <label>Distância <span>opcional</span><div class="field-with-unit"><input id="cardio-distance" type="number" min="0" max="200" step="0.1" inputmode="decimal" placeholder="0" /><b>km</b></div></label>
+            <label>Intensidade<select id="cardio-intensity"><option>Leve</option><option selected>Moderada</option><option>Intensa</option><option>Intervalado</option></select></label>
+          </div>
+          <button class="primary-button" type="submit">Registrar cardio <span>→</span></button>
+        </form>
+        <div class="finish-card rest-panel" id="rest-panel" hidden>
+          <div><span class="finish-kicker">Recuperação</span><h2>DESCANSO TAMBÉM CONSTRÓI.</h2><p>Marque o dia de descanso para o ciclo seguir e o placar contar a recuperação.</p></div>
+          <button id="rest-toggle" type="button">Marcar descanso <span>→</span></button>
         </div>
       </section>
 
-      <section class="portal-section module-section" id="alimentacao" aria-labelledby="nutrition-title">
+      <section class="portal-section module-section" id="nutricao" aria-labelledby="nutrition-title">
         <div class="portal-heading">
-          <div><span class="section-number">02</span><div><p>Diário alimentar</p><h2 id="nutrition-title">COMER TAMBÉM É TREINAR.</h2></div></div>
-          <p>Registre o que comeu e acompanhe a meta diária. Fotos de comida podem ser analisadas no chat, mas aqui entram somente os dados.</p>
+          <div><span class="section-number">02</span><div><p>Nutrição · alimentação + suplementação</p><h2 id="nutrition-title">COMER TAMBÉM É TREINAR.</h2></div></div>
+          <p>Refeições e suplementos somam na mesma meta de macros. Fotos de comida podem ser analisadas no chat, mas aqui entram somente os dados.</p>
         </div>
         <div class="split-layout">
           <form class="entry-card" id="meal-form">
@@ -137,13 +153,33 @@
           <div class="log-card">
             <div class="card-title-row"><span class="card-label">Refeições de hoje</span><b id="meal-count">0 registros</b></div>
             <div class="entry-list" id="meal-list"></div>
-            <div class="nutrition-targets" aria-label="Metas nutricionais de hoje">
+            <div class="nutrition-targets" aria-label="Metas nutricionais de hoje (refeições + suplementos)">
               <div data-nutrient="calories"><span><b>Calorias</b><em id="nutrition-calories">0 / 2.300 kcal</em></span><i><u></u></i></div>
               <div data-nutrient="protein"><span><b>Proteína</b><em id="nutrition-protein">0 / 190 g</em></span><i><u></u></i></div>
               <div data-nutrient="carbs"><span><b>Carboidratos</b><em id="nutrition-carbs">0 / 205 g</em></span><i><u></u></i></div>
               <div data-nutrient="fat"><span><b>Gorduras</b><em id="nutrition-fat">0 / 80 g</em></span><i><u></u></i></div>
             </div>
-            <aside class="context-note"><b>Leitura do Zerão</b><p>Meta de referência: 2.300 kcal e 190 g de proteína. As estimativas do chat entram como números, sem guardar a foto da comida.</p></aside>
+            <aside class="context-note"><b>Leitura do Zerão</b><p>Meta de referência: 2.300 kcal e 190 g de proteína, somando refeições e suplementos tomados. As estimativas do chat entram como números, sem guardar a foto da comida.</p></aside>
+          </div>
+        </div>
+        <div class="split-layout supplement-layout">
+          <form class="entry-card" id="supplement-form">
+            <span class="card-label">Novo suplemento</span>
+            <label>Nome do suplemento<input id="supplement-name" type="text" maxlength="60" placeholder="Ex.: whey protein" required /></label>
+            <label>Orientação/horário<input id="supplement-instruction" type="text" maxlength="90" placeholder="Ex.: após o café" /></label>
+            <div class="meal-macro-fields supplement-macros">
+              <label>Calorias <span>por dose</span><div class="field-with-unit"><input id="supplement-calories" type="number" min="0" max="2000" inputmode="decimal" placeholder="0" /><b>kcal</b></div></label>
+              <label>Proteína <span>por dose</span><div class="field-with-unit"><input id="supplement-protein" type="number" min="0" max="200" step="0.1" inputmode="decimal" placeholder="0" /><b>g</b></div></label>
+              <label>Carboidratos <span>por dose</span><div class="field-with-unit"><input id="supplement-carbs" type="number" min="0" max="400" step="0.1" inputmode="decimal" placeholder="0" /><b>g</b></div></label>
+              <label>Gorduras <span>por dose</span><div class="field-with-unit"><input id="supplement-fat" type="number" min="0" max="200" step="0.1" inputmode="decimal" placeholder="0" /><b>g</b></div></label>
+            </div>
+            <p class="field-hint">Whey, albumina, hipercalórico: preencha os macros e eles entram na meta quando você marcar a dose. Creatina e vitaminas podem ficar em branco.</p>
+            <button class="primary-button" type="submit">Adicionar à rotina</button>
+          </form>
+          <div class="log-card">
+            <div class="card-title-row"><span class="card-label">Suplementos de hoje</span><b id="supplement-count">0 itens</b></div>
+            <div class="supplement-list" id="supplement-list"></div>
+            <p class="medical-caption">O Zerão apenas registra sua rotina. Inclusão, retirada ou alteração de suplementos deve ser discutida com um profissional.</p>
           </div>
         </div>
       </section>
@@ -212,28 +248,10 @@
         </div>
       </section>
 
-      <section class="portal-section module-section" id="suplementacao" aria-labelledby="supp-title">
-        <div class="portal-heading">
-          <div><span class="section-number">06</span><div><p>Rotina orientada</p><h2 id="supp-title">SUPLEMENTO SEM ESQUECIMENTO.</h2></div></div>
-          <p>Cadastre somente o que já faz parte da sua orientação profissional e marque o uso diário.</p>
-        </div>
-        <div class="split-layout">
-          <form class="compact-form vertical-form" id="supplement-form">
-            <label>Nome do suplemento<input id="supplement-name" type="text" maxlength="60" placeholder="Ex.: suplemento prescrito" required /></label>
-            <label>Orientação/horário<input id="supplement-instruction" type="text" maxlength="90" placeholder="Ex.: após o café" /></label>
-            <button class="primary-button" type="submit">Adicionar à rotina</button>
-          </form>
-          <div class="log-card">
-            <div class="card-title-row"><span class="card-label">Rotina de hoje</span><b id="supplement-count">0 itens</b></div>
-            <div class="supplement-list" id="supplement-list"></div>
-            <p class="medical-caption">O Zerão apenas registra sua rotina. Inclusão, retirada ou alteração de suplementos deve ser discutida com um profissional.</p>
-          </div>
-        </div>
-      </section>
 
       <section class="portal-section module-section health-section" id="saude" aria-labelledby="health-title">
         <div class="portal-heading">
-          <div><span class="section-number">07</span><div><p>Saúde em contexto</p><h2 id="health-title">O SHAPE NÃO VEM ANTES DA SAÚDE.</h2></div></div>
+          <div><span class="section-number">06</span><div><p>Saúde em contexto</p><h2 id="health-title">O SHAPE NÃO VEM ANTES DA SAÚDE.</h2></div></div>
           <p>Guarde observações para levar às consultas e acompanhe o que merece atenção, sem substituir avaliação médica.</p>
         </div>
         <div class="health-layout">

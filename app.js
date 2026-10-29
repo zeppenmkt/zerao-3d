@@ -56,14 +56,25 @@ const workouts = {
 const STORAGE_KEY = "zerao-workout-v3";
 const HISTORY_KEY = "zerao-history-v2";
 const HISTORY_LIMIT = 200;
+const SESSION_MODES = { CARDIO: "Cardio", R: "Descanso" };
+const CYCLE = ["A", "B", "C", "D", "R"];
 const state = loadState();
-let selectedWorkoutId = state.selectedWorkoutId && workouts[state.selectedWorkoutId] ? state.selectedWorkoutId : "A";
+let selectedWorkoutId = isSelectable(state.selectedWorkoutId) ? state.selectedWorkoutId : "A";
 let currentExercise = null;
 let toastTimer = null;
 
 const list = document.querySelector("#exercise-list");
 const movementModal = document.querySelector("#movement-modal");
 const historyModal = document.querySelector("#history-modal");
+const sessionDateInput = document.querySelector("#session-date");
+
+function isSelectable(workoutId) {
+  return Boolean(workouts[workoutId] || SESSION_MODES[workoutId]);
+}
+
+function sessionLabel(workoutId) {
+  return workouts[workoutId] ? `Treino ${workoutId} — ${workouts[workoutId].title}` : SESSION_MODES[workoutId];
+}
 
 function loadState() {
   try {
@@ -85,7 +96,7 @@ function currentWorkout() {
 }
 
 function currentExercises() {
-  return currentWorkout().exercises;
+  return currentWorkout()?.exercises ?? [];
 }
 
 function exerciseState(exerciseId) {
@@ -111,6 +122,66 @@ function saveHistory(history) {
 
 function dayKey(date = new Date()) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function entryDay(entry) {
+  return entry.day ?? dayKey(new Date(entry.date));
+}
+
+function addHistoryEntry(entry) {
+  const history = getHistory();
+  const retro = entry.day !== dayKey();
+  history.push({ id: window.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`, ...entry, ...(retro && { retro }) });
+  history.sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  saveHistory(history);
+}
+
+function restDays() {
+  try {
+    const daily = JSON.parse(localStorage.getItem("zerao-life-v1"))?.daily ?? {};
+    return Object.keys(daily).filter((day) => daily[day]?.rest);
+  } catch {
+    return [];
+  }
+}
+
+// Próximo passo do ciclo a partir do último treino de força ou descanso registrado; cardio não avança o ciclo.
+function suggestedWorkout() {
+  const events = [
+    ...getHistory().filter((entry) => workouts[entry.workoutId]).map((entry) => ({ day: entryDay(entry), id: entry.workoutId })),
+    ...restDays().map((day) => ({ day, id: "R" })),
+  ];
+  if (!events.length) return "A";
+  const latest = events.reduce((last, event) => (event.day > last.day ? event : last));
+  return CYCLE[(CYCLE.indexOf(latest.id) + 1) % CYCLE.length];
+}
+
+function sessionDay() {
+  return sessionDateInput.value || dayKey();
+}
+
+// Treino de hoje leva a hora real; registro de outro dia fica ao meio-dia daquela data.
+function sessionTimestamp() {
+  const day = sessionDay();
+  return day === dayKey() ? new Date().toISOString() : new Date(`${day}T12:00:00`).toISOString();
+}
+
+function resetSessionDate() {
+  sessionDateInput.value = dayKey();
+  sessionDateInput.max = dayKey();
+}
+
+function relativeDay(day) {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  if (day === dayKey()) return "hoje";
+  if (day === dayKey(yesterday)) return "ontem";
+  return formatHistoryDay(`${day}T12:00:00`);
+}
+
+function whenCopy(day) {
+  const relative = relativeDay(day);
+  return relative === "hoje" ? "" : relative === "ontem" ? " ontem" : ` em ${relative}`;
 }
 
 function hasLoad(value) {
@@ -161,7 +232,7 @@ function archiveStaleSession() {
     if (!workouts[workoutId]) return;
     const summary = sessionSummary(workoutId);
     if (!summary.done) return;
-    history.push({ date: new Date(`${state.activeDate}T12:00:00`).toISOString(), workoutId, workoutTitle: workouts[workoutId].title, ...summary, auto: true });
+    history.push({ id: `auto-${state.activeDate}-${workoutId}`, date: new Date(`${state.activeDate}T12:00:00`).toISOString(), day: state.activeDate, workoutId, workoutTitle: workouts[workoutId].title, ...summary, auto: true });
     clearSessionChecks(workoutId);
   });
   history.sort((a, b) => String(b.date).localeCompare(String(a.date)));
@@ -225,13 +296,24 @@ function renderExercises() {
   const fragment = document.createDocumentFragment();
   currentExercises().forEach((exercise, index) => fragment.appendChild(createExerciseCard(exercise, index)));
   list.replaceChildren(fragment);
-  document.querySelector("#workout-title").textContent = `TREINO ${selectedWorkoutId} — ${workout.title}`;
-  document.querySelector("#workout-description").textContent = `${workout.focus}. ${currentExercises().length} exercícios · ${totalSets()} séries · ${workout.duration}.`;
+  document.querySelector("#strength-panel").hidden = !workout;
+  document.querySelector("#cardio-panel").hidden = selectedWorkoutId !== "CARDIO";
+  document.querySelector("#rest-panel").hidden = selectedWorkoutId !== "R";
+  document.querySelector("#workout-title").textContent = workout ? `TREINO ${selectedWorkoutId} — ${workout.title}` : SESSION_MODES[selectedWorkoutId].toUpperCase();
+  document.querySelector("#workout-description").textContent = workout
+    ? `${workout.focus}. ${currentExercises().length} exercícios · ${totalSets()} séries · ${workout.duration}.`
+    : selectedWorkoutId === "CARDIO"
+      ? "Esteira, bike, corrida ou o que rolar no dia. Registre a duração e, se quiser, a distância."
+      : "Dia de recuperação do ciclo. Marque o descanso para o Zerão sugerir o próximo treino certo.";
+  const suggested = suggestedWorkout();
   document.querySelectorAll("[data-workout]").forEach((button) => {
     const active = button.dataset.workout === selectedWorkoutId;
     button.classList.toggle("active", active);
+    button.classList.toggle("suggested", button.dataset.workout === suggested);
     button.setAttribute("aria-pressed", String(active));
   });
+  document.querySelector("#session-hint").innerHTML = `Próximo do ciclo: <b>${sessionLabel(suggested)}</b>. Pode escolher qualquer outro.`;
+  if (typeof renderRestPanel === "function") renderRestPanel();
   document.querySelector("#total-sets").textContent = totalSets();
   updateProgress();
   if (typeof updateDashboard === "function") updateDashboard();
@@ -251,7 +333,7 @@ function completedSets() {
 function updateProgress() {
   const completed = completedSets();
   const total = totalSets();
-  const percent = Math.round((completed / total) * 100);
+  const percent = total ? Math.round((completed / total) * 100) : 0;
   document.querySelector("#completed-sets").textContent = completed;
   document.querySelector("#progress-percent").textContent = `${percent}%`;
   document.querySelector("#progress-bar").style.width = `${percent}%`;
@@ -317,15 +399,16 @@ function finishWorkout() {
     return;
   }
   const { total, loads } = sessionSummary(selectedWorkoutId);
-  const history = getHistory();
-  history.unshift({ date: new Date().toISOString(), workoutId: selectedWorkoutId, workoutTitle: currentWorkout().title, done, total, loads });
-  saveHistory(history);
+  const day = sessionDay();
+  addHistoryEntry({ date: sessionTimestamp(), day, workoutId: selectedWorkoutId, workoutTitle: currentWorkout().title, done, total, loads });
 
   clearSessionChecks(selectedWorkoutId);
   if (!Object.keys(workouts).some((workoutId) => sessionSummary(workoutId).done)) delete state.activeDate;
   saveState();
+  resetSessionDate();
   renderExercises();
-  showToast(done === total ? "Treino completo registrado. Aí sim!" : `Treino registrado com ${done} de ${total} séries.`);
+  const when = whenCopy(day);
+  showToast(done === total ? `Treino completo registrado${when}. Aí sim!` : `Treino registrado${when} com ${done} de ${total} séries.`);
 }
 
 function renderHistory() {
@@ -339,14 +422,22 @@ function renderHistory() {
   container.innerHTML = history
     .map((entry) => {
       const date = new Date(entry.date);
-      const day = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short" }).format(date).replace(".", "").toUpperCase();
-      const time = new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit" }).format(date);
-      const score = Math.round((entry.done / entry.total) * 100);
+      const day = formatHistoryDay(`${entryDay(entry)}T12:00:00`).toUpperCase();
+      const when = entry.auto
+        ? "registrado automaticamente"
+        : entry.retro ? "registrado depois" : new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit" }).format(date);
+      const cardio = entry.workoutId === "CARDIO";
+      const title = cardio ? `Cardio — ${entry.workoutTitle}` : entry.workoutId ? `Treino ${entry.workoutId} — ${entry.workoutTitle}` : "Treino de pernas";
+      const detail = cardio
+        ? [`${entry.minutes} min`, entry.distance ? `${Number(entry.distance).toLocaleString("pt-BR")} km` : "", entry.intensity?.toLowerCase()].filter(Boolean).join(" · ")
+        : `${entry.done} de ${entry.total} séries`;
+      const score = cardio ? `${entry.minutes}′` : `${Math.round((entry.done / entry.total) * 100)}%`;
       return `
         <article class="history-entry">
           <div class="history-date">${day.replace(" ", "<br>")}</div>
-          <div><strong>${entry.workoutId ? `Treino ${entry.workoutId} — ${entry.workoutTitle}` : "Treino de pernas"}</strong><p>${entry.done} de ${entry.total} séries · ${time}</p></div>
-          <span class="history-score">${score}%</span>
+          <div><strong>${title}</strong><p>${detail} · ${when}</p></div>
+          <span class="history-score">${score}</span>
+          <button class="history-remove" type="button" data-remove-history="${entry.id ?? entry.date}" aria-label="Remover registro">×</button>
         </article>
       `;
     })
@@ -377,10 +468,40 @@ list.addEventListener("click", (event) => {
 
 document.querySelector("#workout-selector").addEventListener("click", (event) => {
   const button = event.target.closest("[data-workout]");
-  if (!button || !workouts[button.dataset.workout]) return;
+  if (!button || !isSelectable(button.dataset.workout)) return;
   selectedWorkoutId = button.dataset.workout;
+  state.selectedDay = dayKey();
   saveState();
   renderExercises();
+});
+
+document.querySelector("#cardio-panel").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const minutes = Number(document.querySelector("#cardio-minutes").value);
+  if (!minutes) return;
+  const day = sessionDay();
+  addHistoryEntry({
+    date: sessionTimestamp(),
+    day,
+    workoutId: "CARDIO",
+    workoutTitle: document.querySelector("#cardio-type").value,
+    minutes,
+    distance: Number(document.querySelector("#cardio-distance").value) || 0,
+    intensity: document.querySelector("#cardio-intensity").value,
+  });
+  event.currentTarget.reset();
+  resetSessionDate();
+  renderExercises();
+  showToast(`Cardio registrado${whenCopy(day)}. Coração agradece.`);
+});
+
+document.querySelector("#history-list").addEventListener("click", (event) => {
+  const button = event.target.closest("[data-remove-history]");
+  if (!button || !window.confirm("Remover este registro do histórico?")) return;
+  saveHistory(getHistory().filter((entry) => (entry.id ?? entry.date) !== button.dataset.removeHistory));
+  renderHistory();
+  renderExercises();
+  showToast("Registro removido.");
 });
 
 document.querySelector("#close-movement").addEventListener("click", closeMovement);
@@ -407,6 +528,7 @@ document.querySelector("#clear-history").addEventListener("click", () => {
   if (window.confirm("Apagar todo o histórico de treinos deste navegador?")) {
     saveHistory([]);
     renderHistory();
+    renderExercises();
     showToast("Histórico apagado.");
   }
 });
@@ -853,5 +975,10 @@ const humanViewer = (() => {
   return { open, close, toggle };
 })();
 
+resetSessionDate();
 archiveStaleSession();
+// Num dia novo, sem treino em andamento, já abre no próximo do ciclo.
+if (state.selectedDay !== dayKey() && !Object.keys(workouts).some((workoutId) => sessionSummary(workoutId).done)) {
+  selectedWorkoutId = suggestedWorkout();
+}
 renderExercises();

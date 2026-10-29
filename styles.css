@@ -2585,3 +2585,141 @@ button.cycle-rest.active span {
   text-align: right;
   color: #d9dade;
 }
+
+/* Treino flexível: seleção livre, data, cardio e descanso */
+.session-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px 24px;
+  margin: 0 0 16px;
+}
+
+.session-bar label {
+  display: grid;
+  gap: 8px;
+  color: #c5c7cc;
+  font-size: 0.69rem;
+  font-weight: 700;
+}
+
+.session-bar input {
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #0e1117;
+  color: white;
+  color-scheme: dark;
+}
+
+.session-bar p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.session-bar p b {
+  color: var(--sun);
+}
+
+.workout-selector {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.workout-selector button {
+  position: relative;
+}
+
+.workout-selector button.suggested::after {
+  content: "Próximo";
+  position: absolute;
+  top: -9px;
+  right: 10px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--sun);
+  color: #080a0f;
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cardio-form {
+  margin-top: 8px;
+}
+
+.cardio-fields {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  align-items: end;
+}
+
+.rest-panel p {
+  max-width: 520px;
+  margin: 14px 0 0;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.rest-panel {
+  margin-top: 8px;
+}
+
+.history-entry {
+  grid-template-columns: 62px 1fr auto 28px;
+}
+
+.history-remove {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: none;
+  color: #777c86;
+  cursor: pointer;
+}
+
+.history-remove:hover {
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+}
+
+.supplement-layout {
+  margin-top: 22px;
+}
+
+.field-hint {
+  margin: 0;
+  color: #6e737e;
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 1000px) {
+  .workout-selector {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 14px;
+  }
+
+  .cardio-fields {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .workout-selector {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cardio-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+[hidden] {
+  display: none !important;
+}
