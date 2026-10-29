@@ -26,7 +26,9 @@ Abrir `index.html` diretamente também funciona na maioria dos navegadores, mas 
 
 ## Publicação na Hostinger
 
-Configure o Git do hPanel com este repositório, branch `main` e caminho de instalação `projetozerao`. A pasta de destino precisa estar vazia na primeira implantação.
+O workflow `.github/workflows/deploy.yml` publica automaticamente cada atualização da branch `main` em uma conta FTP da Hostinger restrita à pasta `public_html/projetozerao`.
+
+Os dados de acesso ficam protegidos nos secrets `FTP_SERVER`, `FTP_USERNAME` e `FTP_PASSWORD` do GitHub Actions e não fazem parte do repositório.
 
 O projeto usa caminhos relativos, portanto pode ser servido em `https://zeppen.com.br/projetozerao/` sem alterar os arquivos da raiz do domínio.
 
