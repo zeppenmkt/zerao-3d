@@ -22,6 +22,13 @@ jobs:
       - name: Baixar o código
         uses: actions/checkout@v6
 
+      - name: Preparar arquivos sem cache antigo
+        run: |
+          cp styles.css styles.20261029-3.css
+          cp sync.js sync.20261029-3.js
+          cp app.js app.20261029-3.js
+          cp portal.js portal.20261029-3.js
+
       - name: Enviar arquivos para a Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
