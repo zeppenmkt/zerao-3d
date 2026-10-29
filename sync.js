@@ -3,6 +3,7 @@ const ZERAO_KEYS = {
   workout: "zerao-workout-v3",
   history: "zerao-history-v2",
 };
+const ZERAO_ASSET_VERSION = "20261029-2";
 
 const isLocalPreview = ["localhost", "127.0.0.1"].includes(window.location.hostname) || window.location.protocol === "file:";
 let syncTimer = null;
@@ -92,10 +93,10 @@ function loadPortalScripts() {
   if (scriptsLoaded) return;
   scriptsLoaded = true;
   const appScript = document.createElement("script");
-  appScript.src = "app.js";
+  appScript.src = `app.js?v=${ZERAO_ASSET_VERSION}`;
   appScript.onload = () => {
     const portalScript = document.createElement("script");
-    portalScript.src = "portal.js";
+    portalScript.src = `portal.js?v=${ZERAO_ASSET_VERSION}`;
     document.body.append(portalScript);
   };
   document.body.append(appScript);
