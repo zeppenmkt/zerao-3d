@@ -25,14 +25,15 @@ jobs:
       - name: Preparar arquivos sem cache antigo
         run: |
           VERSION="${GITHUB_SHA::8}"
-          for asset in styles.css sync.js app.js portal.js; do
+          for asset in styles.css pages.js sync.js app.js portal.js; do
             cp "$asset" "${asset%.*}.$VERSION.${asset##*.}"
           done
           sed -i "s/const ZERAO_ASSET_VERSION = \"\";/const ZERAO_ASSET_VERSION = \"$VERSION\";/" "sync.$VERSION.js"
-          sed -i -e "s/href=\"styles.css\"/href=\"styles.$VERSION.css\"/" -e "s/src=\"sync.js\"/src=\"sync.$VERSION.js\"/" index.html
+          sed -i -e "s/href=\"styles.css\"/href=\"styles.$VERSION.css\"/" -e "s/src=\"pages.js\"/src=\"pages.$VERSION.js\"/" -e "s/src=\"sync.js\"/src=\"sync.$VERSION.js\"/" index.html
           grep -q "ZERAO_ASSET_VERSION = \"$VERSION\"" "sync.$VERSION.js"
           grep -q "styles.$VERSION.css" index.html
           grep -q "sync.$VERSION.js" index.html
+          grep -q "pages.$VERSION.js" index.html
 
       - name: Enviar arquivos para a Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0

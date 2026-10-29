@@ -2723,3 +2723,48 @@ button.cycle-rest.active span {
 [hidden] {
   display: none !important;
 }
+
+/* Navegação por páginas: a capa completa só aparece na Visão geral */
+body[data-page]:not([data-page="visao-geral"]) .hero-portal {
+  min-height: 0;
+}
+
+body[data-page]:not([data-page="visao-geral"]) .hero-portal .hero-content,
+body[data-page]:not([data-page="visao-geral"]) .hero-portal .overall-panel,
+body[data-page]:not([data-page="visao-geral"]) .hero-portal::after {
+  display: none;
+}
+
+body[data-page]:not([data-page="visao-geral"]) .topbar {
+  border-bottom: 0;
+}
+
+main > section {
+  min-height: calc(100vh - 170px);
+}
+
+a.daily-task {
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+a.daily-task > em {
+  margin-left: auto;
+  color: #4f535c;
+  font-style: normal;
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+a.daily-task:hover > em {
+  color: var(--sun);
+  transform: translateX(3px);
+}
+
+body[data-page]:not([data-page="visao-geral"]) main > section {
+  padding-top: 64px;
+}
+
+/* Seções que dividem a mesma página ficam separadas por uma linha, sem o respiro de página nova */
+main > section + section:not([hidden]) {
+  min-height: 0;
+}

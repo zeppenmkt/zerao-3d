@@ -563,18 +563,6 @@ document.querySelector("#health-list").addEventListener("click", (event) => {
 document.querySelector("#exercise-list").addEventListener("change", () => window.setTimeout(updateDashboard));
 document.querySelector("#finish-workout").addEventListener("click", () => window.setTimeout(updateDashboard));
 
-const observedSections = [...document.querySelectorAll(".module-section, #visao-geral")];
-const navLinks = [...document.querySelectorAll(".module-nav a")];
-const sectionObserver = new IntersectionObserver(
-  (entries) => {
-    const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-    if (!visible) return;
-    navLinks.forEach((link) => link.classList.toggle("active", link.getAttribute("href") === `#${visible.target.id}`));
-  },
-  { rootMargin: "-20% 0px -65%", threshold: [0.05, 0.25] },
-);
-observedSections.forEach((section) => sectionObserver.observe(section));
-
 // Aba aberta desde ontem: recarrega para o "hoje" valer de novo (sem interromper quem está digitando).
 function reloadOnNewDay() {
   if (document.visibilityState !== "visible" || localDateKey() === portalToday) return;
