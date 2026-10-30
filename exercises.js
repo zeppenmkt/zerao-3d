@@ -1,7 +1,7 @@
 // Biblioteca de exercícios do Zerão: nome mais usado nas academias, grupo muscular, animação 3D mais próxima,
 // repetições sugeridas, dica de execução e apelidos (aliases) que a busca também reconhece.
 // Os ids nunca mudam: o histórico de cargas é guardado por id. Exercícios criados no portal ficam nos dados sincronizados.
-const EXERCISE_GROUPS = ["Peito", "Ombros", "Costas", "Trapézio", "Bíceps", "Tríceps", "Antebraço", "Quadríceps", "Posteriores", "Glúteos", "Adutores", "Panturrilhas", "Abdômen"];
+const EXERCISE_GROUPS = ["Peito", "Ombros", "Costas", "Trapézio", "Bíceps", "Tríceps", "Antebraço", "Quadríceps", "Posteriores", "Glúteos", "Adutores", "Panturrilhas", "Abdômen", "Cardio"];
 
 // Animação usada por exercícios criados no portal, conforme o grupo escolhido.
 const GROUP_ANIMATIONS = {
@@ -18,6 +18,7 @@ const GROUP_ANIMATIONS = {
   "Adutores": "adduction",
   "Panturrilhas": "calfRaise",
   "Abdômen": "crunch",
+  "Cardio": null,
 };
 
 const EXERCISE_LIBRARY = {
@@ -114,4 +115,17 @@ const EXERCISE_LIBRARY = {
   "x-abdominal-infra": { name: "Abdominal infra", group: "Abdômen", animation: "crunch", reps: "12–15 repetições", cue: "Lombar colada no chão. Eleve as pernas e leve o quadril um pouco para cima, descendo devagar sem arquear.", aliases: ["Abdominal infra (elevação de pernas)", "elevação de pernas"] },
   "x-abdominal-polia": { name: "Abdominal na polia", group: "Abdômen", animation: "crunch", reps: "12–15 repetições", cue: "Ajoelhado, corda perto da cabeça. Enrole o tronco para baixo usando o abdômen, sem puxar com os braços.", aliases: ["Abdominal na polia (crunch)", "crunch na polia", "abdominal ajoelhado"] },
   "x-prancha": { name: "Prancha", group: "Abdômen", animation: "birdDog", reps: "30–60 segundos", cue: "Antebraços no chão, corpo em linha reta e abdômen e glúteos contraídos. Respire normalmente sem deixar o quadril cair." },
+  // Cardio
+  "k-esteira-caminhada": { name: "Esteira (caminhada)", group: "Cardio", kind: "cardio", animation: null, reps: "duração livre", cue: "Passos firmes e postura ereta. Use a inclinação para aumentar a intensidade sem precisar correr.", aliases: ["esteira", "caminhada"] },
+  "k-esteira-corrida": { name: "Esteira (corrida)", group: "Cardio", kind: "cardio", animation: null, reps: "duração livre", cue: "Comece em ritmo leve por alguns minutos. Pisada abaixo do corpo e braços soltos acompanhando o passo.", aliases: ["esteira", "corrida", "trote"] },
+  "k-bicicleta": { name: "Bicicleta ergométrica", group: "Cardio", kind: "cardio", animation: null, reps: "duração livre", cue: "Ajuste o banco para o joelho ficar quase estendido embaixo. Mantenha a cadência estável e o tronco relaxado.", aliases: ["bike", "spinning"] },
+  "k-eliptico": { name: "Elíptico", group: "Cardio", kind: "cardio", animation: null, reps: "duração livre", cue: "Empurre e puxe as alavancas junto com as pernas e mantenha o tronco ereto, sem se apoiar no painel.", aliases: ["transport"] },
+  "k-escada": { name: "Escada (simulador)", group: "Cardio", kind: "cardio", animation: null, reps: "duração livre", cue: "Suba com o pé inteiro no degrau e evite se pendurar no corrimão; use as mãos só para equilíbrio.", aliases: ["stairmaster", "escada"] },
+  "k-remo": { name: "Remo ergômetro", group: "Cardio", kind: "cardio", animation: null, reps: "duração livre", cue: "Empurre primeiro com as pernas, depois incline o tronco e puxe com os braços. Volte na ordem inversa.", aliases: ["remo"] },
+  "k-corrida-rua": { name: "Corrida na rua", group: "Cardio", kind: "cardio", animation: null, reps: "duração livre", cue: "Aqueça caminhando, mantenha um ritmo em que ainda consiga falar frases curtas e hidrate-se.", aliases: ["corrida", "trote"] },
+  "k-caminhada": { name: "Caminhada", group: "Cardio", kind: "cardio", animation: null, reps: "duração livre", cue: "Ritmo em que a respiração acelera sem perder o fôlego. Calçado confortável e postura ereta.", aliases: ["caminhar"] },
+  "k-caminhada-academia": { name: "Caminhada até a academia", group: "Cardio", kind: "cardio", animation: null, reps: "duração livre", cue: "Conta como cardio leve do dia. Se quiser, acelere o passo em alguns trechos.", aliases: ["ida e volta", "deslocamento"] },
+  "k-natacao": { name: "Natação", group: "Cardio", kind: "cardio", animation: null, reps: "duração livre", cue: "Priorize a técnica e a respiração ritmada; alterne estilos se cansar.", aliases: ["piscina"] },
+  "k-pular-corda": { name: "Pular corda", group: "Cardio", kind: "cardio", animation: null, reps: "duração livre", cue: "Saltos baixos na ponta dos pés, cotovelos perto do corpo e giro da corda pelos punhos.", aliases: ["corda"] },
+  "k-hiit": { name: "HIIT / circuito", group: "Cardio", kind: "cardio", animation: null, reps: "duração livre", cue: "Alterne estímulos fortes e curtos com pausas. Aqueça antes e pare se sentir tontura ou dor.", aliases: ["intervalado", "circuito", "funcional"] },
 };

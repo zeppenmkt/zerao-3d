@@ -101,37 +101,20 @@
           <button type="button" data-workout="B" aria-pressed="false"><span>B</span><b>Pernas + panturrilhas</b></button>
           <button type="button" data-workout="C" aria-pressed="false"><span>C</span><b>Costas + abdômen</b></button>
           <button type="button" data-workout="D" aria-pressed="false"><span>D</span><b>Braços + antebraço</b></button>
+          <button type="button" data-workout="CARDIO" aria-pressed="false"><span>♥</span><b>Só cardio</b></button>
           <button type="button" data-workout="R" aria-pressed="false"><span>R</span><b>Descanso</b></button>
         </div>
         <div id="strength-panel">
           <div class="progress-panel workout-progress" aria-live="polite">
             <div class="progress-copy"><span>Progresso deste treino</span><strong id="progress-percent">0%</strong></div>
             <div class="progress-track" aria-hidden="true"><div id="progress-bar"></div></div>
-            <div class="progress-meta"><span><b id="completed-sets">0</b> de <b id="total-sets">0</b> séries</span><span id="progress-message">Começa no seu ritmo.</span></div>
+            <div class="progress-meta"><span id="progress-count"><b>0</b> de <b>0</b> séries</span><span id="progress-message">Começa no seu ritmo.</span></div>
           </div>
           <div class="exercise-list" id="exercise-list"></div>
           <div class="plan-tools">
             <button class="add-exercise" id="add-exercise" type="button">+ Adicionar exercício</button>
             <p id="plan-status" hidden></p>
           </div>
-        </div>
-        <div class="cardio-section" id="cardio-section">
-          <div class="cardio-head">
-            <div><span class="finish-kicker">Cardio do dia</span><h2>CORAÇÃO TAMBÉM TREINA.</h2></div>
-            <p>Entra junto com a musculação, no dia de descanso ou sozinho. Vale a data do treino escolhida acima.</p>
-          </div>
-          <div class="cardio-presets" id="cardio-presets"></div>
-          <form class="entry-card cardio-form" id="cardio-panel">
-            <span class="card-label">Novo cardio</span>
-            <div class="cardio-fields">
-              <label>Modalidade<select id="cardio-type"><option>Esteira</option><option>Bicicleta</option><option>Elíptico</option><option>Escada</option><option>Corrida na rua</option><option>Caminhada</option><option>Caminhada até a academia</option><option>Natação</option><option>Outro</option></select></label>
-              <label>Duração<div class="field-with-unit"><input id="cardio-minutes" type="number" min="1" max="600" inputmode="numeric" placeholder="30" required /><b>min</b></div></label>
-              <label>Distância <span>opcional</span><div class="field-with-unit"><input id="cardio-distance" type="number" min="0" max="200" step="0.1" inputmode="decimal" placeholder="0" /><b>km</b></div></label>
-              <label>Intensidade<select id="cardio-intensity"><option>Leve</option><option selected>Moderada</option><option>Intensa</option><option>Intervalado</option></select></label>
-            </div>
-            <button class="primary-button" type="submit">Registrar cardio <span>→</span></button>
-          </form>
-          <div class="cardio-log" id="cardio-log"></div>
         </div>
         <div class="finish-card" id="finish-panel">
           <div><span class="finish-kicker">Fechou o treino?</span><h2>REGISTRA ESSA VITÓRIA.</h2></div>

@@ -321,11 +321,11 @@ function updateDashboard() {
   ].filter(Boolean);
   document.querySelector("#nutrition-task-copy").textContent = nutritionParts.length ? nutritionParts.join(" · ") : "Nada registrado ainda";
   document.querySelector("#sleep-task-copy").textContent = sleep ? `${Number(sleep.hours).toLocaleString("pt-BR")} horas registradas` : "Sono ainda não registrado";
-  const sessionNames = sessions.map((entry) => (entry.workoutId === "CARDIO" ? `cardio ${entry.minutes} min` : `treino ${entry.workoutId}`));
+  const sessionTitle = sessions.length ? historyDayTitle([...sessions].reverse()) : "";
   document.querySelector("#workout-task-copy").textContent = workout.done
-    ? `${workout.done} de ${workout.total} séries concluídas`
-    : sessionNames.length
-      ? `Registrado: ${sessionNames.join(" + ")}`
+    ? `${workout.done} de ${workout.total} etapas concluídas`
+    : sessionTitle
+      ? `Registrado: ${sessionTitle}`
       : rest ? "Dia de descanso" : "Treino ainda não iniciado";
   document.querySelector("#metric-workout").textContent = `${workout.done}/${workout.total || 28}`;
 }

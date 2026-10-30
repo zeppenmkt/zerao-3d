@@ -3141,135 +3141,9 @@ main > section + section:not([hidden]) {
   }
 }
 
-/* Cardio do dia: seção própria abaixo do treino */
+/* Seletor: A, B, C, D, Só cardio e Descanso */
 .workout-selector {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-}
-
-.cardio-section {
-  margin-top: 64px;
-  padding-top: 48px;
-  border-top: 1px solid var(--line);
-}
-
-.cardio-head {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 14px 40px;
-  margin-bottom: 22px;
-}
-
-.cardio-head .finish-kicker {
-  color: var(--sun);
-}
-
-.cardio-head h2 {
-  margin: 0;
-  font: italic 900 clamp(2rem, 4vw, 3rem) / 0.95 var(--display);
-}
-
-.cardio-head p {
-  max-width: 420px;
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.82rem;
-  line-height: 1.55;
-}
-
-.cardio-presets {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 14px;
-}
-
-.cardio-presets:empty {
-  display: none;
-}
-
-.cardio-presets > span {
-  margin-right: 4px;
-  color: var(--muted);
-  font-size: 0.7rem;
-  font-weight: 700;
-}
-
-.cardio-presets button {
-  border: 1px solid rgba(246, 201, 0, 0.5);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--sun);
-  padding: 9px 14px;
-  font-size: 0.74rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.cardio-presets button:hover {
-  background: var(--sun);
-  color: var(--ink);
-}
-
-.cardio-log {
-  margin-top: 14px;
-}
-
-.cardio-log-head {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 2px 8px;
-  color: var(--muted);
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.cardio-log-head b {
-  color: var(--sun);
-}
-
-.cardio-log article {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 4px 14px;
-  padding: 13px 16px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  margin-bottom: 8px;
-}
-
-.cardio-log strong {
-  font-size: 0.88rem;
-}
-
-.cardio-log p {
-  grid-column: 1;
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.74rem;
-}
-
-.cardio-log article button {
-  grid-row: 1 / span 2;
-  grid-column: 2;
-  width: 28px;
-  height: 28px;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  background: none;
-  color: #777c86;
-  cursor: pointer;
-}
-
-.cardio-empty {
-  margin: 0;
-  color: #6e737e;
-  font-size: 0.78rem;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 
 @media (max-width: 1000px) {
@@ -3282,4 +3156,39 @@ main > section + section:not([hidden]) {
   .workout-selector {
     grid-template-columns: 1fr 1fr;
   }
+}
+
+/* Cardio como exercício, botão de tirar e detalhes do histórico */
+.cardio-intensity select {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: white;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.cardio-card .exercise-number {
+  color: #a8741f;
+}
+
+.skip-button {
+  border: 0;
+  background: none;
+  color: #777c86;
+  padding: 4px 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.skip-button:hover {
+  color: #ff6b6b;
+}
+
+.history-entry .history-groups {
+  margin-top: 4px;
+  color: #b9a35a;
+  font-size: 0.68rem;
+  line-height: 1.45;
 }
