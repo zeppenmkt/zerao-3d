@@ -334,6 +334,7 @@ function renderExercises() {
   currentExercises().forEach((exercise, index) => fragment.appendChild(createExerciseCard(exercise, index)));
   list.replaceChildren(fragment);
   document.querySelector("#strength-panel").hidden = !workout;
+  document.querySelector("#finish-panel").hidden = !workout;
   document.querySelector("#rest-panel").hidden = selectedWorkoutId !== "R";
   document.querySelector("#workout-title").textContent = workout ? `TREINO ${selectedWorkoutId} — ${workout.title}` : SESSION_MODES[selectedWorkoutId].toUpperCase();
   document.querySelector("#workout-description").textContent = workout

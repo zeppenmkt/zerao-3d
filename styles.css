@@ -2665,8 +2665,9 @@ button.cycle-rest.active span {
   line-height: 1.5;
 }
 
+#finish-panel,
 .rest-panel {
-  margin-top: 8px;
+  margin-top: 56px;
 }
 
 .history-entry {
