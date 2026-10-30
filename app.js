@@ -1,54 +1,51 @@
+// Fichas padrão do ciclo. A ficha personalizada de cada treino fica em state.plans; trocas de uma sessão, em state.sessionPlans.
 const workouts = {
   A: {
     title: "Peito + ombros",
     focus: "Peitoral superior, peitoral geral e deltoides",
-    duration: "cerca de 65 min",
     exercises: [
-      { id: "a-supino-inclinado", name: "Supino inclinado com halteres", sets: 4, reps: "8–12 repetições", animation: "chestPress", cue: "Mantenha os pés firmes, escápulas apoiadas e os punhos alinhados. Desça os halteres com controle e empurre sem bater os pesos no alto." },
-      { id: "a-supino-reto-maquina", name: "Supino reto na máquina", sets: 4, reps: "8–12 repetições", animation: "chestPress", cue: "Ajuste o banco para as alças ficarem na linha do peito. Empurre mantendo ombros baixos e retorne devagar sem perder o apoio das costas." },
-      { id: "a-peck-deck", name: "Crucifixo na máquina (Peck Deck)", sets: 4, reps: "10–12 repetições", animation: "chestFly", cue: "Apoie bem as costas e mantenha leve flexão nos cotovelos. Feche os braços contraindo o peitoral e abra apenas até uma amplitude confortável." },
-      { id: "a-elevacao-lateral", name: "Elevação lateral com halteres", sets: 4, reps: "10–12 repetições", animation: "lateralRaise", cue: "Eleve os braços para os lados com cotovelos levemente flexionados, sem encolher os ombros ou usar impulso. Desça controlando." },
-      { id: "a-crucifixo-inverso", name: "Crucifixo inverso na máquina", sets: 4, reps: "12–15 repetições", animation: "reverseFly", cue: "Mantenha o peito apoiado e abra os braços levando os cotovelos para trás. Evite arquear a lombar ou acelerar a volta." },
+      { id: "a-supino-inclinado", sets: 4 },
+      { id: "a-supino-reto-maquina", sets: 4 },
+      { id: "a-peck-deck", sets: 4 },
+      { id: "a-elevacao-lateral", sets: 4 },
+      { id: "a-crucifixo-inverso", sets: 4 },
     ],
   },
   B: {
     title: "Pernas + panturrilhas",
     focus: "Quadríceps, posteriores, glúteos e panturrilhas",
-    duration: "cerca de 75 min",
     exercises: [
-      { id: "b-leg-press", name: "Leg press 45°", sets: 4, reps: "10–12 repetições", animation: "legPress", cue: "Mantenha lombar e quadril apoiados. Desça a plataforma com controle sem deixar os joelhos fecharem e empurre sem travar totalmente as pernas." },
-      { id: "b-extensora", name: "Cadeira extensora", sets: 4, reps: "10–12 repetições", animation: "legExtension", cue: "Ajuste o joelho ao eixo da máquina. Estenda as pernas com controle, faça uma pausa curta no alto e retorne sem soltar o peso." },
-      { id: "b-flexora", name: "Mesa flexora", sets: 4, reps: "10–12 repetições", animation: "legCurl", cue: "Mantenha o quadril apoiado. Flexione os joelhos levando os calcanhares em direção aos glúteos e retorne devagar." },
-      { id: "b-abdutora", name: "Cadeira abdutora", sets: 4, reps: "12–15 repetições", animation: "abduction", cue: "Mantenha quadril e costas apoiados. Abra os joelhos com controle, sem impulso, e retorne resistindo ao peso." },
-      { id: "b-adutora", name: "Cadeira adutora", sets: 4, reps: "12–15 repetições", animation: "adduction", cue: "Ajuste uma amplitude confortável. Feche as pernas controlando a carga e retorne sem deixar as placas baterem." },
-      { id: "b-panturrilha", name: "Panturrilha sentada", sets: 4, reps: "12–15 repetições", animation: "calfRaise", cue: "Use toda a amplitude confortável: desça os calcanhares, eleve até contrair a panturrilha e pause brevemente no alto." },
+      { id: "b-leg-press", sets: 4 },
+      { id: "b-extensora", sets: 4 },
+      { id: "b-flexora", sets: 4 },
+      { id: "b-abdutora", sets: 4 },
+      { id: "b-adutora", sets: 4 },
+      { id: "b-panturrilha", sets: 4 },
     ],
   },
   C: {
     title: "Costas + abdômen",
     focus: "Largura, espessura, trapézio e estabilidade abdominal",
-    duration: "cerca de 70 min",
     exercises: [
-      { id: "c-puxada-aberta", name: "Puxada alta aberta", sets: 4, reps: "10–12 repetições", animation: "latPulldown", cue: "Segure a barra com pegada aberta, mantenha o peito elevado e puxe em direção à parte superior do peito levando os cotovelos para baixo." },
-      { id: "c-puxada-fechada", name: "Puxada alta fechada", sets: 4, reps: "10–12 repetições", animation: "latPulldown", cue: "Use a pegada neutra, mantenha o tronco estável e puxe o triângulo em direção ao peito sem balançar o corpo." },
-      { id: "c-remada-baixa", name: "Remada baixa no cabo", sets: 4, reps: "10–12 repetições", animation: "row", cue: "Mantenha a coluna neutra e puxe levando os cotovelos para trás. Evite transformar o movimento em um balanço do tronco." },
-      { id: "c-remada-articulada", name: "Remada articulada com apoio", sets: 4, reps: "10–12 repetições", animation: "row", cue: "Apoie o peito, mantenha os ombros longe das orelhas e conduza os cotovelos para trás, apertando as costas no final." },
-      { id: "c-encolhimento", name: "Encolhimento com halteres", sets: 4, reps: "12–15 repetições", animation: "shrug", cue: "Eleve os ombros em direção às orelhas, segure um instante e desça lentamente. Não gire os ombros durante o movimento." },
-      { id: "c-abdominal-maquina", name: "Abdominal na máquina", sets: 4, reps: "12–15 repetições", animation: "crunch", cue: "Inicie o movimento pelo abdômen, aproximando costelas e quadril. Não puxe apenas com os braços e não prenda a respiração." },
-      { id: "c-bird-dog", name: "Bird dog", sets: 4, reps: "8–10 por lado", animation: "birdDog", cue: "Em quatro apoios, estenda braço e perna opostos sem girar o quadril. Pause, retorne com controle e alterne os lados." },
+      { id: "c-puxada-aberta", sets: 4 },
+      { id: "c-puxada-fechada", sets: 4 },
+      { id: "c-remada-baixa", sets: 4 },
+      { id: "c-remada-articulada", sets: 4 },
+      { id: "c-encolhimento", sets: 4 },
+      { id: "c-abdominal-maquina", sets: 4 },
+      { id: "c-bird-dog", sets: 4 },
     ],
   },
   D: {
     title: "Bíceps + tríceps + antebraço",
     focus: "Bíceps, tríceps, braquial e antebraços",
-    duration: "cerca de 70 min",
     exercises: [
-      { id: "d-rosca-direta", name: "Rosca direta com barra W", sets: 4, reps: "8–12 repetições", animation: "curl", cue: "Mantenha os cotovelos próximos ao corpo e suba a barra sem balançar o tronco. Desça controlando toda a amplitude." },
-      { id: "d-rosca-alternada", name: "Rosca alternada com halteres", sets: 4, reps: "10–12 repetições", animation: "curl", cue: "Flexione um braço por vez mantendo o ombro estável. Gire a palma para cima durante a subida e evite usar impulso." },
-      { id: "d-rosca-martelo", name: "Rosca martelo com halteres", sets: 4, reps: "10–12 repetições", animation: "hammerCurl", cue: "Mantenha as palmas voltadas uma para a outra e os cotovelos fixos. Suba e desça os halteres de forma controlada." },
-      { id: "d-triceps-corda", name: "Tríceps na polia com corda", sets: 4, reps: "10–12 repetições", animation: "tricepsPushdown", cue: "Fixe os cotovelos ao lado do corpo, estenda os braços e afaste levemente as pontas da corda no final sem inclinar o tronco." },
-      { id: "d-triceps-frances", name: "Tríceps francês unilateral", sets: 4, reps: "10–12 repetições", animation: "tricepsExtension", cue: "Mantenha o braço apontado para cima e flexione apenas o cotovelo, levando o peso atrás da cabeça. Estenda sem abrir o cotovelo." },
-      { id: "d-rosca-inversa", name: "Rosca inversa com barra W", sets: 4, reps: "12–15 repetições", animation: "reverseCurl", cue: "Segure a barra com as palmas para baixo, cotovelos junto ao corpo e punhos firmes. Suba sem balançar e desça devagar." },
+      { id: "d-rosca-direta", sets: 4 },
+      { id: "d-rosca-alternada", sets: 4 },
+      { id: "d-rosca-martelo", sets: 4 },
+      { id: "d-triceps-corda", sets: 4 },
+      { id: "d-triceps-frances", sets: 4 },
+      { id: "d-rosca-inversa", sets: 4 },
     ],
   },
 };
@@ -66,6 +63,8 @@ let toastTimer = null;
 const list = document.querySelector("#exercise-list");
 const movementModal = document.querySelector("#movement-modal");
 const historyModal = document.querySelector("#history-modal");
+const pickerModal = document.querySelector("#exercise-picker");
+let pickerTarget = null;
 const sessionDateInput = document.querySelector("#session-date");
 
 function isSelectable(workoutId) {
@@ -95,8 +94,39 @@ function currentWorkout() {
   return workouts[selectedWorkoutId];
 }
 
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char]);
+}
+
+function exerciseInfo(exerciseId) {
+  return state.customExercises?.[exerciseId] ?? EXERCISE_LIBRARY[exerciseId];
+}
+
+function allExercises() {
+  return { ...EXERCISE_LIBRARY, ...state.customExercises };
+}
+
+function planFor(workoutId) {
+  return state.sessionPlans?.[workoutId] ?? state.plans?.[workoutId] ?? workouts[workoutId].exercises;
+}
+
+// Ficha efetiva: cada item da ficha ({ id, sets, reps? }) completado com os dados da biblioteca.
+function exercisesFor(workoutId) {
+  return planFor(workoutId)
+    .map((slot) => {
+      const info = exerciseInfo(slot.id);
+      return info && { ...info, ...slot, reps: slot.reps ?? info.reps };
+    })
+    .filter(Boolean);
+}
+
 function currentExercises() {
-  return currentWorkout()?.exercises ?? [];
+  return currentWorkout() ? exercisesFor(selectedWorkoutId) : [];
+}
+
+// Cerca de 3,25 min por série, contando o descanso; arredondado de 5 em 5.
+function estimatedDuration(sets) {
+  return `cerca de ${Math.max(5, Math.round((sets * 3.25) / 5) * 5)} min`;
 }
 
 function exerciseState(exerciseId) {
@@ -201,21 +231,21 @@ function loadHistory(exerciseId) {
 }
 
 function sessionSummary(workoutId) {
-  const workout = workouts[workoutId];
+  const exercises = exercisesFor(workoutId);
   const saved = state.workouts?.[workoutId] ?? {};
   let done = 0;
   const loads = {};
-  workout.exercises.forEach((exercise) => {
+  exercises.forEach((exercise) => {
     const sets = saved[exercise.id] ?? {};
     done += Array.from({ length: exercise.sets }, (_, i) => sets[i]?.done).filter(Boolean).length;
     loads[exercise.id] = Array.from({ length: exercise.sets }, (_, i) => sets[i]?.load ?? "");
   });
-  const total = workout.exercises.reduce((sum, exercise) => sum + exercise.sets, 0);
+  const total = exercises.reduce((sum, exercise) => sum + exercise.sets, 0);
   return { done, total, loads };
 }
 
 function clearSessionChecks(workoutId) {
-  workouts[workoutId].exercises.forEach((exercise) => {
+  exercisesFor(workoutId).forEach((exercise) => {
     const saved = state.workouts?.[workoutId]?.[exercise.id];
     if (!saved) return;
     for (let i = 0; i < exercise.sets; i += 1) {
@@ -234,6 +264,7 @@ function archiveStaleSession() {
     if (!summary.done) return;
     history.push({ id: `auto-${state.activeDate}-${workoutId}`, date: new Date(`${state.activeDate}T12:00:00`).toISOString(), day: state.activeDate, workoutId, workoutTitle: workouts[workoutId].title, ...summary, auto: true });
     clearSessionChecks(workoutId);
+    delete state.sessionPlans?.[workoutId];
   });
   history.sort((a, b) => String(b.date).localeCompare(String(a.date)));
   delete state.activeDate;
@@ -255,7 +286,7 @@ function createExerciseCard(exercise, index) {
           data-exercise="${exercise.id}"
           data-set="${setIndex}"
           ${saved.done ? "checked" : ""}
-          aria-label="Concluir série ${setIndex + 1} de ${exercise.name}"
+          aria-label="Concluir série ${setIndex + 1} de ${escapeHtml(exercise.name)}"
         />
         <input
           class="load-input"
@@ -268,7 +299,7 @@ function createExerciseCard(exercise, index) {
           placeholder="${setIndex + 1}ª"
           data-exercise="${exercise.id}"
           data-set="${setIndex}"
-          aria-label="Carga da série ${setIndex + 1} de ${exercise.name} em quilos"
+          aria-label="Carga da série ${setIndex + 1} de ${escapeHtml(exercise.name)} em quilos"
         />
         <span class="unit">kg</span>
       </label>
@@ -277,16 +308,22 @@ function createExerciseCard(exercise, index) {
 
   const last = loadHistory(exercise.id)[0];
   const lastCopy = last ? `<p class="last-load">Última: <b>${last.loads[exercise.id].map(formatLoad).join(" · ")} kg</b> · ${formatHistoryDay(last.date)}</p>` : "";
+  const tip = exerciseNotes(exercise.id)[0];
+  const tipCopy = tip ? `<p class="exercise-tip" title="${escapeHtml(tip.text)}">💡 ${escapeHtml(tip.text)}</p>` : "";
 
   article.innerHTML = `
     <span class="exercise-number">${String(index + 1).padStart(2, "0")}</span>
     <div class="exercise-name">
-      <h3>${exercise.name}</h3>
-      <p>${exercise.sets} séries · ${exercise.reps}</p>
+      <h3>${escapeHtml(exercise.name)}</h3>
+      <p>${exercise.sets} séries · ${escapeHtml(exercise.reps)}</p>
       ${lastCopy}
+      ${tipCopy}
     </div>
     <div class="set-row">${sets}</div>
-    <button class="movement-button" type="button" data-movement="${exercise.id}">▶ Ver movimento 3D</button>
+    <div class="exercise-actions">
+      <button class="movement-button" type="button" data-movement="${exercise.id}">▶ Ver movimento 3D</button>
+      <button class="swap-button" type="button" data-swap="${exercise.id}">⇄ Trocar</button>
+    </div>
   `;
   return article;
 }
@@ -301,7 +338,7 @@ function renderExercises() {
   document.querySelector("#rest-panel").hidden = selectedWorkoutId !== "R";
   document.querySelector("#workout-title").textContent = workout ? `TREINO ${selectedWorkoutId} — ${workout.title}` : SESSION_MODES[selectedWorkoutId].toUpperCase();
   document.querySelector("#workout-description").textContent = workout
-    ? `${workout.focus}. ${currentExercises().length} exercícios · ${totalSets()} séries · ${workout.duration}.`
+    ? `${workout.focus}. ${currentExercises().length} exercícios · ${totalSets()} séries · ${estimatedDuration(totalSets())}.`
     : selectedWorkoutId === "CARDIO"
       ? "Esteira, bike, corrida ou o que rolar no dia. Registre a duração e, se quiser, a distância."
       : "Dia de recuperação do ciclo. Marque o descanso para o Zerão sugerir o próximo treino certo.";
@@ -315,6 +352,11 @@ function renderExercises() {
   document.querySelector("#session-hint").innerHTML = `Próximo do ciclo: <b>${sessionLabel(suggested)}</b>. Pode escolher qualquer outro.`;
   if (typeof renderRestPanel === "function") renderRestPanel();
   document.querySelector("#total-sets").textContent = totalSets();
+  const planStatus = document.querySelector("#plan-status");
+  planStatus.hidden = !workout || !(state.sessionPlans?.[selectedWorkoutId] || state.plans?.[selectedWorkoutId]);
+  planStatus.textContent = state.sessionPlans?.[selectedWorkoutId]
+    ? "Esta sessão tem trocas que valem só até você concluir o treino."
+    : "Ficha personalizada por você.";
   updateProgress();
   if (typeof updateDashboard === "function") updateDashboard();
 }
@@ -356,8 +398,9 @@ function openMovement(exerciseId) {
   document.querySelector("#modal-index").textContent = String(index).padStart(2, "0");
   document.querySelector("#modal-title").textContent = currentExercise.name;
   document.querySelector("#modal-prescription").textContent = `${currentExercise.sets} séries · ${currentExercise.reps}`;
-  document.querySelector("#modal-cue").textContent = currentExercise.cue;
+  document.querySelector("#modal-cue").textContent = currentExercise.cue || "Sem dica de execução cadastrada. Use as anotações abaixo para guardar as orientações que receber.";
   renderLoadHistory(currentExercise);
+  renderNotes(currentExercise.id);
   document.querySelector("#youtube-link").href = `https://www.youtube.com/results?search_query=${encodeURIComponent(`Leandro Twin ${currentExercise.name} execução`)}`;
   document.querySelector("#play-icon").textContent = "Ⅱ";
   document.querySelector("#play-label").textContent = "Pausar animação";
@@ -376,6 +419,19 @@ function renderLoadHistory(exercise) {
   container.innerHTML = `<span>Evolução de carga</span><ol>${sessions
     .map((entry, i) => `<li><small>${formatHistoryDay(entry.date)}</small><i><u style="width:${highest ? Math.round((peaks[i] / highest) * 100) : 0}%"></u></i><b>${formatLoad(peaks[i])} kg</b></li>`)
     .join("")}</ol>`;
+}
+
+function exerciseNotes(exerciseId) {
+  return [...(state.exerciseNotes?.[exerciseId] ?? [])].sort((a, b) => String(b.date).localeCompare(String(a.date)));
+}
+
+function renderNotes(exerciseId) {
+  const notes = exerciseNotes(exerciseId);
+  document.querySelector("#notes-list").innerHTML = notes.length
+    ? notes
+        .map((note) => `<li><small>${formatHistoryDay(`${note.date}T12:00:00`)}${note.source ? ` · ${escapeHtml(note.source)}` : ""}</small><p>${escapeHtml(note.text)}</p><button type="button" data-remove-note="${escapeHtml(note.id)}" aria-label="Remover anotação">×</button></li>`)
+        .join("")
+    : '<li class="notes-empty">Nenhuma anotação ainda. Guarde aqui as dicas de professores, do fisioterapeuta ou do chat.</li>';
 }
 
 function closeMovement() {
@@ -403,6 +459,7 @@ function finishWorkout() {
   addHistoryEntry({ date: sessionTimestamp(), day, workoutId: selectedWorkoutId, workoutTitle: currentWorkout().title, done, total, loads });
 
   clearSessionChecks(selectedWorkoutId);
+  delete state.sessionPlans?.[selectedWorkoutId];
   if (!Object.keys(workouts).some((workoutId) => sessionSummary(workoutId).done)) delete state.activeDate;
   saveState();
   resetSessionDate();
@@ -464,6 +521,8 @@ list.addEventListener("input", (event) => {
 list.addEventListener("click", (event) => {
   const button = event.target.closest("[data-movement]");
   if (button) openMovement(button.dataset.movement);
+  const swap = event.target.closest("[data-swap]");
+  if (swap) openPicker(swap.dataset.swap);
 });
 
 document.querySelector("#workout-selector").addEventListener("click", (event) => {
@@ -533,7 +592,176 @@ document.querySelector("#clear-history").addEventListener("click", () => {
   }
 });
 
-[movementModal, historyModal].forEach((modal) => {
+// --- Ficha editável: trocar, adicionar e remover exercícios ---
+
+function normalizeText(value) {
+  return String(value).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+}
+
+function pickerScope() {
+  return document.querySelector('input[name="picker-scope"]:checked').value;
+}
+
+function editPlan(plan, change) {
+  const slots = plan.map((slot) => ({ ...slot }));
+  if (change.type === "remove") return slots.filter((slot) => slot.id !== change.from);
+  if (change.type === "add") return [...slots, { id: change.to, sets: 4 }];
+  const index = slots.findIndex((slot) => slot.id === change.from);
+  if (index >= 0) slots[index] = { id: change.to, sets: slots[index].sets };
+  return slots;
+}
+
+// "session" vale até concluir o treino; "plan" muda a ficha e acompanha a sessão em andamento.
+function applyPlanChange(change, scope) {
+  const workoutId = selectedWorkoutId;
+  if (scope === "plan") {
+    state.plans ??= {};
+    state.plans[workoutId] = editPlan(state.plans[workoutId] ?? workouts[workoutId].exercises, change);
+    if (state.sessionPlans?.[workoutId]) state.sessionPlans[workoutId] = editPlan(state.sessionPlans[workoutId], change);
+  } else {
+    state.sessionPlans ??= {};
+    state.sessionPlans[workoutId] = editPlan(planFor(workoutId), change);
+  }
+  saveState();
+  renderExercises();
+}
+
+function renderPickerList() {
+  const query = normalizeText(document.querySelector("#picker-search").value.trim());
+  const group = document.querySelector("#picker-group").value;
+  const inWorkout = new Set(planFor(selectedWorkoutId).map((slot) => slot.id));
+  const items = Object.entries(allExercises())
+    .filter(([, exercise]) => (!group || exercise.group === group) && (!query || normalizeText(exercise.name).includes(query)))
+    .sort(([, a], [, b]) => EXERCISE_GROUPS.indexOf(a.group) - EXERCISE_GROUPS.indexOf(b.group) || a.name.localeCompare(b.name, "pt-BR"));
+  document.querySelector("#picker-list").innerHTML = items.length
+    ? items
+        .map(([id, exercise]) => {
+          const here = inWorkout.has(id);
+          const meta = [exercise.group, exercise.reps, exercise.custom ? "criado por você" : "", here ? "já está no treino" : ""].filter(Boolean).map(escapeHtml).join(" · ");
+          return `<button type="button" data-pick="${escapeHtml(id)}" ${here ? "disabled" : ""}><b>${escapeHtml(exercise.name)}</b><small>${meta}</small></button>`;
+        })
+        .join("")
+    : '<p class="picker-empty">Nada encontrado. Crie o exercício logo abaixo.</p>';
+}
+
+function openPicker(targetId) {
+  pickerTarget = targetId;
+  const target = targetId ? exerciseInfo(targetId) : null;
+  document.querySelector("#picker-kicker").textContent = sessionLabel(selectedWorkoutId);
+  document.querySelector("#picker-title").textContent = target ? "TROCAR EXERCÍCIO" : "ADICIONAR EXERCÍCIO";
+  document.querySelector("#picker-current").innerHTML = target
+    ? `No lugar de <b>${escapeHtml(target.name)}</b>. As cargas de cada exercício ficam guardadas separadas.`
+    : "Escolha um exercício para incluir neste treino.";
+  document.querySelector("#picker-search").value = "";
+  document.querySelector("#picker-group").value = target?.group ?? "";
+  document.querySelector("#new-exercise-group").value = target?.group ?? EXERCISE_GROUPS[0];
+  document.querySelector('input[name="picker-scope"][value="session"]').checked = true;
+  document.querySelector("#picker-create").open = false;
+  document.querySelector("#picker-remove").hidden = !target;
+  const reset = document.querySelector("#picker-reset");
+  reset.hidden = !state.plans?.[selectedWorkoutId] && !state.sessionPlans?.[selectedWorkoutId];
+  reset.textContent = `Restaurar a ficha padrão do Treino ${selectedWorkoutId}`;
+  renderPickerList();
+  pickerModal.showModal();
+  document.body.style.overflow = "hidden";
+}
+
+function closePicker() {
+  pickerModal.close();
+  document.body.style.overflow = "";
+}
+
+function pickExercise(exerciseId) {
+  const scope = pickerScope();
+  applyPlanChange(pickerTarget ? { type: "replace", from: pickerTarget, to: exerciseId } : { type: "add", to: exerciseId }, scope);
+  closePicker();
+  const name = exerciseInfo(exerciseId).name;
+  showToast(`${name} ${pickerTarget ? "entrou no lugar" : "adicionado"} ${scope === "plan" ? "na ficha" : "só nesta sessão"}.`);
+}
+
+document.querySelector("#picker-group").innerHTML = `<option value="">Todos os grupos</option>${EXERCISE_GROUPS.map((group) => `<option>${group}</option>`).join("")}`;
+document.querySelector("#new-exercise-group").innerHTML = EXERCISE_GROUPS.map((group) => `<option>${group}</option>`).join("");
+document.querySelector("#picker-search").addEventListener("input", renderPickerList);
+document.querySelector("#picker-group").addEventListener("change", renderPickerList);
+document.querySelector("#close-picker").addEventListener("click", closePicker);
+document.querySelector("#add-exercise").addEventListener("click", () => openPicker(null));
+
+document.querySelector("#picker-list").addEventListener("click", (event) => {
+  const button = event.target.closest("[data-pick]");
+  if (button) pickExercise(button.dataset.pick);
+});
+
+document.querySelector("#picker-create-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const name = document.querySelector("#new-exercise-name").value.trim();
+  if (!name) return;
+  const group = document.querySelector("#new-exercise-group").value;
+  const slug = normalizeText(name).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
+  const id = `c-${slug}-${Date.now().toString(36)}`;
+  state.customExercises ??= {};
+  state.customExercises[id] = {
+    name,
+    group,
+    animation: GROUP_ANIMATIONS[group],
+    reps: document.querySelector("#new-exercise-reps").value.trim() || "10–12 repetições",
+    cue: document.querySelector("#new-exercise-cue").value.trim(),
+    custom: true,
+  };
+  event.currentTarget.reset();
+  pickExercise(id);
+});
+
+document.querySelector("#picker-remove").addEventListener("click", () => {
+  if (planFor(selectedWorkoutId).length <= 1) {
+    showToast("O treino precisa de pelo menos um exercício.");
+    return;
+  }
+  const scope = pickerScope();
+  const name = exerciseInfo(pickerTarget).name;
+  applyPlanChange({ type: "remove", from: pickerTarget }, scope);
+  closePicker();
+  showToast(`${name} removido ${scope === "plan" ? "da ficha" : "só desta sessão"}.`);
+});
+
+document.querySelector("#picker-reset").addEventListener("click", () => {
+  if (!window.confirm(`Voltar o Treino ${selectedWorkoutId} para a ficha padrão? As cargas registradas continuam no histórico.`)) return;
+  delete state.plans?.[selectedWorkoutId];
+  delete state.sessionPlans?.[selectedWorkoutId];
+  saveState();
+  renderExercises();
+  closePicker();
+  showToast("Ficha padrão restaurada.");
+});
+
+document.querySelector("#note-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const text = document.querySelector("#note-text").value.trim();
+  if (!text || !currentExercise) return;
+  state.exerciseNotes ??= {};
+  state.exerciseNotes[currentExercise.id] ??= [];
+  state.exerciseNotes[currentExercise.id].push({
+    id: window.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    date: dayKey(),
+    text,
+    source: document.querySelector("#note-source").value.trim(),
+  });
+  saveState();
+  event.currentTarget.reset();
+  renderNotes(currentExercise.id);
+  renderExercises();
+  showToast("Anotação salva neste exercício.");
+});
+
+document.querySelector("#notes-list").addEventListener("click", (event) => {
+  const button = event.target.closest("[data-remove-note]");
+  if (!button || !currentExercise || !window.confirm("Remover esta anotação?")) return;
+  state.exerciseNotes[currentExercise.id] = state.exerciseNotes[currentExercise.id].filter((note) => note.id !== button.dataset.removeNote);
+  saveState();
+  renderNotes(currentExercise.id);
+  renderExercises();
+});
+
+[movementModal, historyModal, pickerModal].forEach((modal) => {
   modal.addEventListener("click", (event) => {
     if (event.target !== modal) return;
     if (modal === movementModal) closeMovement();

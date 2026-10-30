@@ -225,17 +225,23 @@ function assetPath(file) {
   return ZERAO_ASSET_VERSION ? file.replace(/\.js$/, `.${ZERAO_ASSET_VERSION}.js`) : file;
 }
 
+// Carrega em ordem: a biblioteca de exercícios, o treino e o restante do portal.
 function loadPortalScripts() {
   if (scriptsLoaded) return;
   scriptsLoaded = true;
-  const appScript = document.createElement("script");
-  appScript.src = assetPath("app.js");
-  appScript.onload = () => {
-    const portalScript = document.createElement("script");
-    portalScript.src = assetPath("portal.js");
-    document.body.append(portalScript);
-  };
-  document.body.append(appScript);
+  ["exercises.js", "app.js", "portal.js"].reduce(
+    (previous, file) =>
+      previous.then(
+        () =>
+          new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = assetPath(file);
+            script.onload = resolve;
+            document.body.append(script);
+          }),
+      ),
+    Promise.resolve(),
+  );
 }
 
 window.zeraoSync = {

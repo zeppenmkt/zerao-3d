@@ -7,6 +7,7 @@ Portal pessoal de evolução integral do Zé. O projeto combina treino, alimenta
 - painel diário com placar dos pilares de evolução;
 - ciclo sugerido 4×1 com fichas A (peito e ombros), B (pernas e panturrilhas), C (costas e abdômen), D (braços e antebraço) e descanso, com escolha livre do treino, cardio e registro em qualquer data;
 - séries, cargas, histórico e demonstrações humanas 3D para cada exercício;
+- biblioteca de exercícios (`exercises.js`) com troca só na sessão ou fixa na ficha, exercícios próprios e anotações de dicas por exercício;
 - nutrição unificada: refeições e suplementos somam nas metas de 2.300 kcal, 190 g de proteína, 205 g de carboidratos e 80 g de gorduras;
 - registro de peso com gráfico de tendência;
 - galeria privada de fotos do shape, com data, ângulo e comparação lado a lado;

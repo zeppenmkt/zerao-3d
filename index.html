@@ -111,6 +111,10 @@
             <div class="progress-meta"><span><b id="completed-sets">0</b> de <b id="total-sets">0</b> séries</span><span id="progress-message">Começa no seu ritmo.</span></div>
           </div>
           <div class="exercise-list" id="exercise-list"></div>
+          <div class="plan-tools">
+            <button class="add-exercise" id="add-exercise" type="button">+ Adicionar exercício</button>
+            <p id="plan-status" hidden></p>
+          </div>
           <div class="finish-card">
             <div><span class="finish-kicker">Fechou o treino?</span><h2>REGISTRA ESSA VITÓRIA.</h2></div>
             <button id="finish-workout" type="button">Concluir treino <span>→</span></button>
@@ -285,7 +289,15 @@
         </div>
         <div class="movement-copy">
           <span class="modal-index" id="modal-index">01</span><h2 id="modal-title">Agachamento livre</h2><p id="modal-prescription">4 séries · 8–10 repetições</p>
-          <div class="cue-box"><span>Execução</span><p id="modal-cue"></p></div><div class="load-history" id="modal-loads" hidden></div><div class="warning-box"><span>!</span><p>Modelo visual simplificado. Ajuste a técnica com um profissional de educação física.</p></div>
+          <div class="cue-box"><span>Execução</span><p id="modal-cue"></p></div><div class="load-history" id="modal-loads" hidden></div>
+          <div class="notes-box">
+            <span>Dicas e anotações</span>
+            <ul id="notes-list"></ul>
+            <form id="note-form">
+              <textarea id="note-text" rows="2" maxlength="400" placeholder="Ex.: professor pediu para segurar 1 s no topo" required></textarea>
+              <div><input id="note-source" type="text" maxlength="40" placeholder="Fonte (opcional): professor, fisio, chat…" /><button type="submit">Salvar dica</button></div>
+            </form>
+          </div><div class="warning-box"><span>!</span><p>Modelo visual simplificado. Ajuste a técnica com um profissional de educação física.</p></div>
           <button class="play-button" id="toggle-animation" type="button"><span id="play-icon">Ⅱ</span> <b id="play-label">Pausar animação</b></button>
           <a class="youtube-button" id="youtube-link" href="#" target="_blank" rel="noopener noreferrer"><span class="youtube-icon">▶</span>Ver Leandro Twin no YouTube<span>↗</span></a>
         </div>
@@ -296,6 +308,38 @@
       <button class="modal-close" id="close-history" type="button" aria-label="Fechar">×</button>
       <div class="history-header"><span class="section-number">H</span><div><p>Seu caminho</p><h2>HISTÓRICO DE TREINOS</h2></div></div>
       <div class="history-list" id="history-list"></div><button class="clear-history" id="clear-history" type="button">Limpar histórico de treinos</button>
+    </dialog>
+
+    <dialog class="modal history-modal picker-modal" id="exercise-picker">
+      <button class="modal-close" id="close-picker" type="button" aria-label="Fechar">×</button>
+      <div class="history-header"><span class="section-number">⇄</span><div><p id="picker-kicker">Treino</p><h2 id="picker-title">TROCAR EXERCÍCIO</h2></div></div>
+      <p class="picker-current" id="picker-current"></p>
+      <fieldset class="picker-scope">
+        <legend>Vale para</legend>
+        <label><input type="radio" name="picker-scope" value="session" checked /><span><b>Só nesta sessão</b><small>Volta à ficha quando você concluir o treino</small></span></label>
+        <label><input type="radio" name="picker-scope" value="plan" /><span><b>Fixar na ficha</b><small>Passa a valer nos próximos treinos</small></span></label>
+      </fieldset>
+      <div class="picker-filters">
+        <input id="picker-search" type="search" placeholder="Buscar exercício" aria-label="Buscar exercício" />
+        <select id="picker-group" aria-label="Grupo muscular"></select>
+      </div>
+      <div class="picker-list" id="picker-list"></div>
+      <details class="picker-create" id="picker-create">
+        <summary>+ Criar exercício que não está na lista</summary>
+        <form id="picker-create-form">
+          <label>Nome<input id="new-exercise-name" type="text" maxlength="60" placeholder="Ex.: Tríceps no cross unilateral" required /></label>
+          <div class="picker-create-row">
+            <label>Grupo<select id="new-exercise-group"></select></label>
+            <label>Repetições<input id="new-exercise-reps" type="text" maxlength="30" placeholder="10–12 repetições" /></label>
+          </div>
+          <label>Dica de execução <span>opcional</span><textarea id="new-exercise-cue" rows="3" maxlength="300"></textarea></label>
+          <button class="primary-button" type="submit">Criar e usar</button>
+        </form>
+      </details>
+      <div class="picker-footer">
+        <button type="button" id="picker-remove">Tirar este exercício</button>
+        <button type="button" id="picker-reset">Restaurar a ficha padrão</button>
+      </div>
     </dialog>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>

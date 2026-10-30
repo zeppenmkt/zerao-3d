@@ -2768,3 +2768,374 @@ body[data-page]:not([data-page="visao-geral"]) main > section {
 main > section + section:not([hidden]) {
   min-height: 0;
 }
+
+/* Ficha editável: trocar, adicionar, anotações */
+.exercise-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.swap-button {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: #a9adb6;
+  border-radius: 999px;
+  padding: 9px 15px;
+  white-space: nowrap;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.74rem;
+  transition: 170ms ease;
+}
+
+.swap-button:hover {
+  border-color: #565b65;
+  color: white;
+}
+
+.exercise-name .exercise-tip {
+  margin-top: 6px;
+  max-width: 340px;
+  overflow: hidden;
+  color: #c9b45c;
+  font-size: 0.72rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.plan-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  padding: 24px 0 0;
+}
+
+.add-exercise {
+  border: 1px dashed #565b65;
+  border-radius: 999px;
+  background: transparent;
+  color: white;
+  padding: 12px 20px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.add-exercise:hover {
+  border-color: var(--sun);
+  color: var(--sun);
+}
+
+.plan-tools p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.picker-modal {
+  max-width: 720px;
+}
+
+.picker-current {
+  margin: 18px 0 14px;
+  color: #c5c7cc;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.picker-scope {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+}
+
+.picker-scope legend {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.picker-scope label {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.picker-scope label:has(input:checked) {
+  border-color: var(--sun);
+  background: rgba(246, 201, 0, 0.08);
+}
+
+.picker-scope input {
+  margin-top: 3px;
+  accent-color: var(--sun);
+}
+
+.picker-scope b,
+.picker-scope small {
+  display: block;
+}
+
+.picker-scope b {
+  font-size: 0.82rem;
+}
+
+.picker-scope small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.picker-filters {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 10px;
+}
+
+.picker-filters input,
+.picker-filters select,
+.picker-create input,
+.picker-create select,
+.picker-create textarea,
+#note-form textarea,
+#note-form input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 13px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #0e1117;
+  color: white;
+  font: inherit;
+  font-size: 0.82rem;
+}
+
+.picker-create textarea,
+#note-form textarea {
+  padding-block: 10px;
+  resize: vertical;
+}
+
+.picker-list {
+  max-height: 38vh;
+  margin-top: 12px;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.picker-list button {
+  width: 100%;
+  display: block;
+  padding: 12px 15px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+}
+
+.picker-list button:hover:not(:disabled) {
+  background: rgba(246, 201, 0, 0.08);
+}
+
+.picker-list button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.picker-list b {
+  display: block;
+  font-size: 0.86rem;
+}
+
+.picker-list small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.picker-empty {
+  margin: 0;
+  padding: 18px 15px;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.picker-create {
+  margin-top: 16px;
+}
+
+.picker-create summary {
+  color: var(--sun);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.picker-create form {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.picker-create label {
+  display: grid;
+  gap: 7px;
+  color: #c5c7cc;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.picker-create label > span {
+  color: #6e737e;
+  font-weight: 500;
+}
+
+.picker-create-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.picker-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.picker-footer button {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: #777c86;
+  font-size: 0.74rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#picker-remove:hover {
+  color: #ff6b6b;
+}
+
+.notes-box {
+  border-top: 1px solid var(--line);
+  padding: 18px 0;
+}
+
+.notes-box > span {
+  color: var(--sun);
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  font-size: 0.63rem;
+  font-weight: 800;
+}
+
+#notes-list {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+#notes-list li {
+  position: relative;
+  padding: 10px 34px 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+#notes-list li.notes-empty {
+  padding-right: 12px;
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+#notes-list small {
+  color: var(--muted);
+  font-size: 0.66rem;
+}
+
+#notes-list p {
+  margin: 4px 0 0;
+  color: #d9dade;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+#notes-list button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: 0;
+  background: none;
+  color: #777c86;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+#note-form {
+  display: grid;
+  gap: 8px;
+}
+
+#note-form div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+#note-form button {
+  border: 0;
+  border-radius: 10px;
+  padding: 0 16px;
+  background: var(--sun);
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .exercise-actions {
+    grid-column: 1 / -1;
+    margin-left: 48px;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .exercise-actions .movement-button {
+    margin-left: 0;
+  }
+
+  .picker-scope,
+  .picker-filters,
+  .picker-create-row {
+    grid-template-columns: 1fr;
+  }
+
+  .picker-modal {
+    padding: 28px 20px;
+  }
+}
