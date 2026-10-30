@@ -154,6 +154,15 @@ function renderShapeComparison() {
 async function renderShapes() {
   const gallery = document.querySelector("#shape-gallery");
   if (!gallery) return;
+  const locked = !window.zeraoAuth?.loggedIn;
+  document.querySelector("#shape-locked").hidden = !locked;
+  document.querySelector(".shape-layout").hidden = locked;
+  if (locked) {
+    shapePhotos = [];
+    selectedShapeIds = [];
+    gallery.innerHTML = "";
+    return;
+  }
   gallery.innerHTML = '<div class="empty-state shape-loading"><b>Carregando evolução…</b></div>';
   try {
     shapePhotos = await window.zeraoSync.listShapes();
@@ -415,6 +424,9 @@ document.querySelector("#weight-form").addEventListener("submit", (event) => {
   updateDashboard();
   notifyPortal("Peso salvo na curva de evolução.");
 });
+
+// Entrar ou sair muda o que a galeria pode mostrar.
+document.addEventListener("zerao:auth", renderShapes);
 
 document.querySelector("#shape-form").addEventListener("submit", async (event) => {
   event.preventDefault();

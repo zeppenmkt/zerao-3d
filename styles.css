@@ -3576,3 +3576,150 @@ main > section + section:not([hidden]) {
     padding: 20px 18px;
   }
 }
+
+/* Login do portal */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.auth-button {
+  background: var(--sun);
+  border-color: var(--sun);
+  color: var(--ink);
+}
+
+.auth-button:hover {
+  background: #ffe04a;
+  border-color: #ffe04a;
+}
+
+.auth-button.logged-in {
+  background: rgba(9, 11, 16, 0.36);
+  border-color: rgba(255, 255, 255, 0.26);
+  color: white;
+}
+
+.auth-button.logged-in span {
+  color: #6fd991;
+  font-size: 0.6rem;
+}
+
+.auth-button.logged-in:hover {
+  background: var(--sun);
+  border-color: var(--sun);
+  color: var(--ink);
+}
+
+.auth-modal {
+  max-width: 440px;
+}
+
+.auth-copy,
+.auth-note {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.auth-copy {
+  margin: 22px 0 18px;
+}
+
+.auth-note {
+  margin: 20px 0 0;
+  font-size: 0.78rem;
+}
+
+.auth-form {
+  display: grid;
+  gap: 14px;
+}
+
+.auth-form label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.auth-form input {
+  min-height: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.17);
+  border-radius: 10px;
+  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--paper);
+  font-size: 1rem;
+}
+
+.auth-form input:focus {
+  border-color: var(--sun);
+  outline: none;
+}
+
+.auth-error {
+  min-height: 1.2em;
+  margin: 0;
+  color: var(--red);
+  font-size: 0.82rem;
+}
+
+.auth-error:empty {
+  min-height: 0;
+  margin-top: -14px;
+}
+
+.shape-locked {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+  padding: 26px 28px;
+  border: 1px dashed rgba(255, 255, 255, 0.22);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.shape-locked-icon {
+  font-size: 1.6rem;
+}
+
+.shape-locked b {
+  font-size: 1.05rem;
+}
+
+.shape-locked p {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+/* Visitante: controles de edição continuam visíveis, mas o clique pede login. */
+body.is-visitor main :is(input, select, textarea) {
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .auth-modal {
+    padding: 32px 22px;
+  }
+
+  .shape-locked {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+
+  .top-actions {
+    gap: 8px;
+  }
+
+  .top-actions .history-button {
+    padding: 10px 14px;
+  }
+}
