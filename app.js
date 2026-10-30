@@ -53,7 +53,7 @@ const workouts = {
 const STORAGE_KEY = "zerao-workout-v3";
 const HISTORY_KEY = "zerao-history-v2";
 const HISTORY_LIMIT = 200;
-const SESSION_MODES = { CARDIO: "Cardio", R: "Descanso" };
+const SESSION_MODES = { R: "Descanso" };
 const CYCLE = ["A", "B", "C", "D", "R"];
 const state = loadState();
 let selectedWorkoutId = isSelectable(state.selectedWorkoutId) ? state.selectedWorkoutId : "A";
@@ -334,14 +334,11 @@ function renderExercises() {
   currentExercises().forEach((exercise, index) => fragment.appendChild(createExerciseCard(exercise, index)));
   list.replaceChildren(fragment);
   document.querySelector("#strength-panel").hidden = !workout;
-  document.querySelector("#cardio-panel").hidden = selectedWorkoutId !== "CARDIO";
   document.querySelector("#rest-panel").hidden = selectedWorkoutId !== "R";
   document.querySelector("#workout-title").textContent = workout ? `TREINO ${selectedWorkoutId} — ${workout.title}` : SESSION_MODES[selectedWorkoutId].toUpperCase();
   document.querySelector("#workout-description").textContent = workout
     ? `${workout.focus}. ${currentExercises().length} exercícios · ${totalSets()} séries · ${estimatedDuration(totalSets())}.`
-    : selectedWorkoutId === "CARDIO"
-      ? "Esteira, bike, corrida ou o que rolar no dia. Registre a duração e, se quiser, a distância."
-      : "Dia de recuperação do ciclo. Marque o descanso para o Zerão sugerir o próximo treino certo.";
+    : "Dia de recuperação do ciclo. Marque o descanso para o Zerão sugerir o próximo treino certo.";
   const suggested = suggestedWorkout();
   document.querySelectorAll("[data-workout]").forEach((button) => {
     const active = button.dataset.workout === selectedWorkoutId;
@@ -351,6 +348,7 @@ function renderExercises() {
   });
   document.querySelector("#session-hint").innerHTML = `Próximo do ciclo: <b>${sessionLabel(suggested)}</b>. Pode escolher qualquer outro.`;
   if (typeof renderRestPanel === "function") renderRestPanel();
+  renderCardio();
   document.querySelector("#total-sets").textContent = totalSets();
   const planStatus = document.querySelector("#plan-status");
   planStatus.hidden = !workout || !(state.sessionPlans?.[selectedWorkoutId] || state.plans?.[selectedWorkoutId]);
@@ -485,9 +483,7 @@ function renderHistory() {
         : entry.retro ? "registrado depois" : new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit" }).format(date);
       const cardio = entry.workoutId === "CARDIO";
       const title = cardio ? `Cardio — ${entry.workoutTitle}` : entry.workoutId ? `Treino ${entry.workoutId} — ${entry.workoutTitle}` : "Treino de pernas";
-      const detail = cardio
-        ? [`${entry.minutes} min`, entry.distance ? `${Number(entry.distance).toLocaleString("pt-BR")} km` : "", entry.intensity?.toLowerCase()].filter(Boolean).join(" · ")
-        : `${entry.done} de ${entry.total} séries`;
+      const detail = cardio ? cardioDetail(entry) : `${entry.done} de ${entry.total} séries`;
       const score = cardio ? `${entry.minutes}′` : `${Math.round((entry.done / entry.total) * 100)}%`;
       return `
         <article class="history-entry">
@@ -534,25 +530,82 @@ document.querySelector("#workout-selector").addEventListener("click", (event) =>
   renderExercises();
 });
 
+// --- Cardio: seção própria, soma em qualquer dia (com musculação, descanso ou sozinho) ---
+
+function cardioDetail(entry) {
+  return [`${entry.minutes} min`, entry.distance ? `${Number(entry.distance).toLocaleString("pt-BR")} km` : "", entry.intensity?.toLowerCase()].filter(Boolean).join(" · ");
+}
+
+function cardioKey(entry) {
+  return [entry.workoutTitle, entry.minutes, entry.distance || 0, entry.intensity].join("|");
+}
+
+// Atalhos de um clique: os cardios repetidos com mais frequência nos últimos registros.
+function cardioPresets() {
+  const counts = new Map();
+  getHistory()
+    .filter((entry) => entry.workoutId === "CARDIO")
+    .slice(0, 40)
+    .forEach((entry) => {
+      const key = cardioKey(entry);
+      const current = counts.get(key) ?? { entry, count: 0 };
+      counts.set(key, { entry: current.entry, count: current.count + 1 });
+    });
+  return [...counts.values()].sort((a, b) => b.count - a.count).slice(0, 4).map(({ entry }) => entry);
+}
+
+function registerCardio({ workoutTitle, minutes, distance, intensity }) {
+  const day = sessionDay();
+  addHistoryEntry({ date: sessionTimestamp(), day, workoutId: "CARDIO", workoutTitle, minutes, distance, intensity });
+  renderExercises();
+  showToast(`${workoutTitle} · ${minutes} min registrado${whenCopy(day)}.`);
+}
+
+function renderCardio() {
+  const day = sessionDay();
+  const entries = getHistory().filter((entry) => entry.workoutId === "CARDIO" && entryDay(entry) === day);
+  const total = entries.reduce((sum, entry) => sum + Number(entry.minutes || 0), 0);
+  const presets = cardioPresets();
+  document.querySelector("#cardio-presets").innerHTML = presets.length
+    ? `<span>Repetir com um clique</span>${presets
+        .map((entry) => `<button type="button" data-cardio-preset="${escapeHtml(cardioKey(entry))}">+ ${escapeHtml(entry.workoutTitle)} · ${escapeHtml(cardioDetail(entry))}</button>`)
+        .join("")}`
+    : "";
+  document.querySelector("#cardio-log").innerHTML = entries.length
+    ? `<div class="cardio-log-head"><span>Cardio de ${escapeHtml(relativeDay(day))}</span><b>${total} min no total</b></div>${entries
+        .map((entry) => `<article><strong>${escapeHtml(entry.workoutTitle)}</strong><p>${escapeHtml(cardioDetail(entry))}</p><button type="button" data-remove-cardio="${escapeHtml(entry.id ?? entry.date)}" aria-label="Remover cardio">×</button></article>`)
+        .join("")}`
+    : `<p class="cardio-empty">Nenhum cardio${escapeHtml(whenCopy(day) || " hoje")} ainda.</p>`;
+}
+
 document.querySelector("#cardio-panel").addEventListener("submit", (event) => {
   event.preventDefault();
   const minutes = Number(document.querySelector("#cardio-minutes").value);
   if (!minutes) return;
-  const day = sessionDay();
-  addHistoryEntry({
-    date: sessionTimestamp(),
-    day,
-    workoutId: "CARDIO",
+  registerCardio({
     workoutTitle: document.querySelector("#cardio-type").value,
     minutes,
     distance: Number(document.querySelector("#cardio-distance").value) || 0,
     intensity: document.querySelector("#cardio-intensity").value,
   });
   event.currentTarget.reset();
-  resetSessionDate();
-  renderExercises();
-  showToast(`Cardio registrado${whenCopy(day)}. Coração agradece.`);
 });
+
+document.querySelector("#cardio-presets").addEventListener("click", (event) => {
+  const button = event.target.closest("[data-cardio-preset]");
+  const preset = button && cardioPresets().find((entry) => cardioKey(entry) === button.dataset.cardioPreset);
+  if (preset) registerCardio(preset);
+});
+
+document.querySelector("#cardio-log").addEventListener("click", (event) => {
+  const button = event.target.closest("[data-remove-cardio]");
+  if (!button || !window.confirm("Remover este cardio?")) return;
+  saveHistory(getHistory().filter((entry) => (entry.id ?? entry.date) !== button.dataset.removeCardio));
+  renderExercises();
+  showToast("Cardio removido.");
+});
+
+sessionDateInput.addEventListener("change", renderCardio);
 
 document.querySelector("#history-list").addEventListener("click", (event) => {
   const button = event.target.closest("[data-remove-history]");

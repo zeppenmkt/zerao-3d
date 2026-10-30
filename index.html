@@ -101,7 +101,6 @@
           <button type="button" data-workout="B" aria-pressed="false"><span>B</span><b>Pernas + panturrilhas</b></button>
           <button type="button" data-workout="C" aria-pressed="false"><span>C</span><b>Costas + abdômen</b></button>
           <button type="button" data-workout="D" aria-pressed="false"><span>D</span><b>Braços + antebraço</b></button>
-          <button type="button" data-workout="CARDIO" aria-pressed="false"><span>♥</span><b>Cardio</b></button>
           <button type="button" data-workout="R" aria-pressed="false"><span>R</span><b>Descanso</b></button>
         </div>
         <div id="strength-panel">
@@ -120,19 +119,27 @@
             <button id="finish-workout" type="button">Concluir treino <span>→</span></button>
           </div>
         </div>
-        <form class="entry-card cardio-form" id="cardio-panel" hidden>
-          <span class="card-label">Registrar cardio</span>
-          <div class="cardio-fields">
-            <label>Modalidade<select id="cardio-type"><option>Esteira</option><option>Bicicleta</option><option>Elíptico</option><option>Escada</option><option>Corrida na rua</option><option>Caminhada</option><option>Natação</option><option>Outro</option></select></label>
-            <label>Duração<div class="field-with-unit"><input id="cardio-minutes" type="number" min="1" max="600" inputmode="numeric" placeholder="30" required /><b>min</b></div></label>
-            <label>Distância <span>opcional</span><div class="field-with-unit"><input id="cardio-distance" type="number" min="0" max="200" step="0.1" inputmode="decimal" placeholder="0" /><b>km</b></div></label>
-            <label>Intensidade<select id="cardio-intensity"><option>Leve</option><option selected>Moderada</option><option>Intensa</option><option>Intervalado</option></select></label>
-          </div>
-          <button class="primary-button" type="submit">Registrar cardio <span>→</span></button>
-        </form>
         <div class="finish-card rest-panel" id="rest-panel" hidden>
           <div><span class="finish-kicker">Recuperação</span><h2>DESCANSO TAMBÉM CONSTRÓI.</h2><p>Marque o dia de descanso para o ciclo seguir e o placar contar a recuperação.</p></div>
           <button id="rest-toggle" type="button">Marcar descanso <span>→</span></button>
+        </div>
+        <div class="cardio-section" id="cardio-section">
+          <div class="cardio-head">
+            <div><span class="finish-kicker">Cardio do dia</span><h2>CORAÇÃO TAMBÉM TREINA.</h2></div>
+            <p>Entra junto com a musculação, no dia de descanso ou sozinho. Vale a data do treino escolhida acima.</p>
+          </div>
+          <div class="cardio-presets" id="cardio-presets"></div>
+          <form class="entry-card cardio-form" id="cardio-panel">
+            <span class="card-label">Novo cardio</span>
+            <div class="cardio-fields">
+              <label>Modalidade<select id="cardio-type"><option>Esteira</option><option>Bicicleta</option><option>Elíptico</option><option>Escada</option><option>Corrida na rua</option><option>Caminhada</option><option>Caminhada até a academia</option><option>Natação</option><option>Outro</option></select></label>
+              <label>Duração<div class="field-with-unit"><input id="cardio-minutes" type="number" min="1" max="600" inputmode="numeric" placeholder="30" required /><b>min</b></div></label>
+              <label>Distância <span>opcional</span><div class="field-with-unit"><input id="cardio-distance" type="number" min="0" max="200" step="0.1" inputmode="decimal" placeholder="0" /><b>km</b></div></label>
+              <label>Intensidade<select id="cardio-intensity"><option>Leve</option><option selected>Moderada</option><option>Intensa</option><option>Intervalado</option></select></label>
+            </div>
+            <button class="primary-button" type="submit">Registrar cardio <span>→</span></button>
+          </form>
+          <div class="cardio-log" id="cardio-log"></div>
         </div>
       </section>
 
