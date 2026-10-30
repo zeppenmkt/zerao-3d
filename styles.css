@@ -1064,8 +1064,8 @@ textarea {
 .hero-portal {
   min-height: 880px;
   background:
-    linear-gradient(100deg, rgba(9, 11, 16, 0.97) 0%, rgba(9, 11, 16, 0.84) 49%, rgba(9, 11, 16, 0.35) 100%),
-    url("https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=2000&q=85") center 30% / cover;
+    linear-gradient(100deg, rgba(9, 11, 16, 0.96) 0%, rgba(9, 11, 16, 0.78) 40%, rgba(9, 11, 16, 0.12) 72%, rgba(9, 11, 16, 0) 100%),
+    url("images/hero-desktop.jpg") right 20% / cover;
 }
 
 .top-actions,
@@ -3768,5 +3768,14 @@ body.is-visitor main :is(input, select, textarea) {
   .photo-frames img + img {
     animation: none;
     opacity: 0;
+  }
+}
+
+/* Fundo do topo: o Zé treinando. No celular, a versão vertical com o texto sobre a parte de baixo escurecida. */
+@media (max-width: 700px) {
+  .hero-portal {
+    background:
+      linear-gradient(180deg, rgba(9, 11, 16, 0.5) 0%, rgba(9, 11, 16, 0.55) 30%, rgba(9, 11, 16, 0.9) 62%, rgba(9, 11, 16, 0.97) 100%),
+      url("images/hero-mobile.jpg") center top / cover;
   }
 }
