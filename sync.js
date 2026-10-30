@@ -302,10 +302,10 @@ function openLogin(control = null) {
   if (!modal || modal.open) return;
   pendingControl = control;
   const setup = zeraoAuth.needsSetup;
-  document.querySelector("#auth-title").textContent = setup ? "CRIAR SENHA" : "ENTRAR";
+  document.querySelector("#auth-title").textContent = setup ? "CRIAR ACESSO" : "ENTRAR";
   document.querySelector("#auth-copy").textContent = setup
     ? zeraoAuth.canSetup
-      ? "Primeiro acesso: crie a senha que vai liberar as edições. Use pelo menos 8 caracteres."
+      ? "Primeiro acesso: escolha o usuário e a senha que vão liberar as edições. A senha precisa ter pelo menos 8 caracteres."
       : "O login ainda não foi configurado neste servidor."
     : control
       ? "Para registrar treinos e editar qualquer informação, entre na sua conta."
@@ -318,7 +318,7 @@ function openLogin(control = null) {
   document.querySelector("#auth-form").reset();
   document.activeElement?.blur?.();
   modal.showModal();
-  document.querySelector("#auth-password").focus();
+  document.querySelector("#auth-username").focus();
 }
 
 function guardEdit(event) {
@@ -362,6 +362,7 @@ document.querySelector("#close-auth")?.addEventListener("click", () => document.
 
 document.querySelector("#auth-form")?.addEventListener("submit", async (event) => {
   event.preventDefault();
+  const username = document.querySelector("#auth-username").value.trim();
   const password = document.querySelector("#auth-password").value;
   const error = document.querySelector("#auth-error");
   if (zeraoAuth.needsSetup && password !== document.querySelector("#auth-confirm").value) {
@@ -372,7 +373,7 @@ document.querySelector("#auth-form")?.addEventListener("submit", async (event) =
   submit.disabled = true;
   error.textContent = "";
   try {
-    await apiRequest("login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ password }) });
+    await apiRequest("login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ username, password }) });
     const meta = readMeta();
     if (meta) writeMeta({ ...meta, owner: true });
     setAuth({ loggedIn: true, needsSetup: false, canSetup: false });

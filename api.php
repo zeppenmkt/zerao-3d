@@ -67,7 +67,7 @@ function write_json_file(string $path, array $value): void
     }
 }
 
-// Login do portal: a senha fica só como hash em zerao_private/auth.json; cada aparelho logado recebe um token
+// Login do portal: usuário em texto e senha só como hash em zerao_private/auth.json; cada aparelho logado recebe um token
 // aleatório em cookie HttpOnly, guardado no servidor apenas como hash.
 const SESSION_COOKIE = 'zerao_session';
 const SESSION_DAYS = 90;
@@ -141,6 +141,7 @@ if ($action === 'session' && $method === 'GET') {
 
 if ($action === 'login' && $method === 'POST') {
     $payload = json_decode((string) file_get_contents('php://input'), true);
+    $username = is_array($payload) ? mb_strtolower(trim((string) ($payload['username'] ?? ''))) : '';
     $password = is_array($payload) ? (string) ($payload['password'] ?? '') : '';
     $ip = hash('sha256', (string) ($_SERVER['REMOTE_ADDR'] ?? ''));
     $now = time();
@@ -152,14 +153,16 @@ if ($action === 'login' && $method === 'POST') {
     $session = session_payload($auth);
     if ($session['needsSetup']) {
         if (!$session['canSetup']) json_response(['error' => 'O login ainda não foi configurado.'], 403);
+        if (!preg_match('/^[a-z0-9._-]{3,40}$/', $username)) json_response(['error' => 'Use um usuário de 3 a 40 letras, números, ponto, hífen ou sublinhado.'], 422);
         if (mb_strlen($password) < 8) json_response(['error' => 'Use uma senha com pelo menos 8 caracteres.'], 422);
+        $auth['user'] = $username;
         $auth['hash'] = password_hash($password, PASSWORD_DEFAULT);
-    } elseif (!password_verify($password, (string) $auth['hash'])) {
+    } elseif (!(password_verify($password, (string) $auth['hash']) && hash_equals((string) ($auth['user'] ?? ''), $username))) {
         $count = ($attempt['count'] ?? 0) + 1;
         $auth['attempts'][$ip] = ['count' => $count, 'last' => $now, 'until' => $count >= MAX_ATTEMPTS ? $now + LOCK_MINUTES * 60 : 0];
         write_json_file($authFile, $auth);
         usleep(400000);
-        json_response(['error' => 'Senha incorreta.'], 401);
+        json_response(['error' => 'Usuário ou senha incorretos.'], 401);
     }
 
     unset($auth['attempts'][$ip]);

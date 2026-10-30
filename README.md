@@ -35,9 +35,9 @@ Os dados de acesso ficam protegidos nos secrets `FTP_SERVER`, `FTP_USERNAME` e `
 
 O projeto usa caminhos relativos, portanto pode ser servido em `https://zeppen.com.br/projetozerao/` sem alterar os arquivos da raiz do domínio.
 
-O acesso tem dois níveis. Qualquer pessoa com o endereço vê o portal em modo visualização; registrar treinos, editar qualquer dado e ver ou enviar fotos do shape exige login pelo botão **Entrar**. A senha fica só como hash em `zerao_private/auth.json`, acima de `public_html`; cada aparelho logado recebe um token aleatório em cookie `HttpOnly` válido por 90 dias, e cinco senhas erradas seguidas bloqueiam novas tentativas por 15 minutos. O PHP cria `zerao_private` automaticamente; ali ficam também `state.json`, o índice da galeria e os arquivos de imagem com permissões privadas.
+O acesso tem dois níveis. Qualquer pessoa com o endereço vê o portal em modo visualização; registrar treinos, editar qualquer dado e ver ou enviar fotos do shape exige login pelo botão **Entrar**. A senha fica só como hash em `zerao_private/auth.json`, acima de `public_html`; cada aparelho logado recebe um token aleatório em cookie `HttpOnly` válido por 90 dias, e cinco tentativas erradas seguidas bloqueiam novas tentativas por 15 minutos. O PHP cria `zerao_private` automaticamente; ali ficam também `state.json`, o índice da galeria e os arquivos de imagem com permissões privadas.
 
-A primeira senha é criada pelo próprio botão **Entrar**, e isso só é aceito enquanto a pasta ainda está sob **Password Protect Directories** da Hostinger. Depois de criar a senha, remova essa proteção no painel. Para trocar a senha, apague `zerao_private/auth.json` pelo gerenciador de arquivos, reative a proteção da pasta por alguns minutos e crie a nova senha.
+O primeiro usuário e senha são criados pelo próprio botão **Entrar**, e isso só é aceito enquanto a pasta ainda está sob **Password Protect Directories** da Hostinger. Depois de criar o acesso, remova essa proteção no painel. Para trocar o usuário ou a senha, apague `zerao_private/auth.json` pelo gerenciador de arquivos, reative a proteção da pasta por alguns minutos e crie o novo acesso.
 
 Não adicione senhas, arquivos `.htpasswd`, fotos ou o diretório privado ao repositório. A configuração da senha é feita apenas no painel da Hostinger.
 
