@@ -25,7 +25,7 @@ jobs:
       - name: Preparar arquivos sem cache antigo
         run: |
           VERSION="${GITHUB_SHA::8}"
-          for asset in styles.css pages.js sync.js exercises.js app.js portal.js; do
+          for asset in styles.css pages.js sync.js exercises.js app.js portal.js dashboard.js; do
             cp "$asset" "${asset%.*}.$VERSION.${asset##*.}"
           done
           sed -i "s/const ZERAO_ASSET_VERSION = \"\";/const ZERAO_ASSET_VERSION = \"$VERSION\";/" "sync.$VERSION.js"

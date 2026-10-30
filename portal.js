@@ -103,7 +103,6 @@ function renderMeals() {
   const meals = todayMeals().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   const list = document.querySelector("#meal-list");
   document.querySelector("#meal-count").textContent = `${meals.length} ${meals.length === 1 ? "registro" : "registros"}`;
-  document.querySelector("#metric-meals").textContent = meals.length;
   renderNutritionTargets(todayIntake());
 
   if (!meals.length) {
@@ -186,7 +185,6 @@ function renderWeights() {
     chartData.innerHTML = '<text x="360" y="112" text-anchor="middle">Sua tendência aparecerá aqui</text>';
     document.querySelector("#weight-current").textContent = "— kg";
     document.querySelector("#weight-change").textContent = "Registre seu primeiro peso";
-    document.querySelector("#metric-weight").textContent = "—";
     return;
   }
 
@@ -212,7 +210,6 @@ function renderWeights() {
   const weekAverage = week.reduce((sum, entry) => sum + Number(entry.value), 0) / week.length;
   const kg = (value) => value.toLocaleString("pt-BR", { maximumFractionDigits: 1 });
   document.querySelector("#weight-current").textContent = `${Number(latest.value).toLocaleString("pt-BR")} kg`;
-  document.querySelector("#metric-weight").textContent = Number(latest.value).toLocaleString("pt-BR");
   document.querySelector("#weight-change").textContent =
     entries.length === 1
       ? "Primeiro ponto registrado"
@@ -225,7 +222,6 @@ function renderSleep() {
   const latest = [...portalState.sleeps].sort((a, b) => b.date.localeCompare(a.date))[0];
   if (!latest) {
     document.querySelector("#last-sleep-hours").textContent = "—";
-    document.querySelector("#metric-sleep").textContent = "—";
     document.querySelector("#recovery-bar").style.width = "0%";
     document.querySelector("#sleep-insight").textContent = "Registre uma noite para começar a entender seu padrão.";
     return;
@@ -234,7 +230,6 @@ function renderSleep() {
   const hours = Number(latest.hours);
   const score = Math.min(100, Math.round((hours / 8) * 70 + (Number(latest.quality) / 5) * 30));
   document.querySelector("#last-sleep-hours").textContent = hours.toLocaleString("pt-BR");
-  document.querySelector("#metric-sleep").textContent = hours.toLocaleString("pt-BR");
   document.querySelector("#recovery-bar").style.width = `${score}%`;
   document.querySelector("#sleep-insight").textContent =
     hours >= 7 && Number(latest.quality) >= 4
@@ -327,7 +322,7 @@ function updateDashboard() {
     : sessionTitle
       ? `Registrado: ${sessionTitle}`
       : rest ? "Dia de descanso" : "Treino ainda não iniciado";
-  document.querySelector("#metric-workout").textContent = `${workout.done}/${workout.total || 28}`;
+  window.renderInsights?.();
 }
 
 function renderPortal() {

@@ -3192,3 +3192,387 @@ main > section + section:not([hidden]) {
   font-size: 0.68rem;
   line-height: 1.45;
 }
+
+/* Painéis: treino (topo da página Treino) e metas/progresso (Visão geral) */
+.training-dashboard {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  gap: 16px;
+  margin: 0 0 36px;
+}
+
+.dash-card {
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(145deg, rgba(25, 28, 36, 0.92), rgba(15, 17, 23, 0.98));
+}
+
+.dash-today {
+  border-color: rgba(246, 201, 0, 0.45);
+}
+
+.dash-card h3 {
+  margin: 10px 0 6px;
+  font: italic 800 1.65rem/1 var(--display);
+  text-transform: uppercase;
+}
+
+.dash-meta,
+.dash-goal,
+.dash-tags,
+.dash-done {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.dash-goal {
+  color: #c5c7cc;
+}
+
+.dash-tags {
+  color: #c9b45c;
+}
+
+.dash-done {
+  color: var(--sun);
+  font-weight: 700;
+}
+
+.load-goals {
+  display: grid;
+  gap: 6px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.load-goals li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.76rem;
+}
+
+.load-goals b {
+  white-space: nowrap;
+  color: white;
+}
+
+.dash-start,
+.goal-link {
+  margin-top: 14px;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 16px;
+  background: var(--sun);
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 0.76rem;
+  cursor: pointer;
+}
+
+.goal-link {
+  margin-top: 8px;
+  padding: 7px 12px;
+}
+
+.pace-hero {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 10px 0 4px;
+}
+
+.pace-hero strong {
+  font: 700 3rem/1 var(--body);
+}
+
+.pace-hero span {
+  color: #c5c7cc;
+  font-size: 0.78rem;
+}
+
+.dash-charts {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.mini-chart {
+  margin: 0;
+  padding: 18px 18px 10px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #10131a;
+}
+
+.mini-chart figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+  font-size: 0.72rem;
+}
+
+.mini-chart figcaption span {
+  color: #c5c7cc;
+  font-weight: 700;
+}
+
+.mini-chart figcaption b {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.mini-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.chart-grid {
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.chart-axis {
+  fill: #6e737e;
+  font-size: 9px;
+}
+
+.chart-value {
+  fill: white;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.chart-bar {
+  fill: rgba(246, 201, 0, 0.45);
+}
+
+.chart-bar.current {
+  fill: var(--sun);
+}
+
+.chart-hit {
+  fill: transparent;
+  cursor: default;
+  outline: none;
+}
+
+.chart-hit:hover,
+.chart-hit:focus-visible {
+  fill: rgba(255, 255, 255, 0.04);
+}
+
+.chart-tip {
+  position: fixed;
+  z-index: 120;
+  display: grid;
+  gap: 2px;
+  padding: 8px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 10px;
+  background: #1b1f28;
+  color: white;
+  font-size: 0.72rem;
+  pointer-events: none;
+}
+
+.chart-tip b {
+  font-size: 0.86rem;
+}
+
+.chart-tip span {
+  color: var(--muted);
+}
+
+.chart-table {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.chart-table summary {
+  cursor: pointer;
+}
+
+.chart-table table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+}
+
+.chart-table th,
+.chart-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.chart-table td {
+  color: #d9dade;
+  font-variant-numeric: tabular-nums;
+}
+
+.goal-list {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.goal-item > span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.goal-item p {
+  margin: 0;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.goal-item .goal-status {
+  color: var(--sun);
+}
+
+.goal-item .goal-hint {
+  color: #8c9099;
+  font-weight: 500;
+  font-size: 0.78rem;
+}
+
+.goal-meter {
+  margin-top: 6px;
+}
+
+.goal-meter i {
+  display: block;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(246, 201, 0, 0.16);
+  overflow: hidden;
+}
+
+.goal-meter u {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--sun);
+}
+
+.goal-meter small {
+  display: block;
+  margin-top: 4px;
+  color: #c5c7cc;
+  font-size: 0.72rem;
+}
+
+.progress-overview {
+  margin-top: 18px;
+  padding: 24px 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(145deg, rgba(25, 28, 36, 0.92), rgba(15, 17, 23, 0.98));
+}
+
+.stat-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.stat-tile {
+  position: relative;
+  padding: 16px 16px 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #10131a;
+}
+
+.stat-tile > span {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.stat-tile strong {
+  display: block;
+  margin: 8px 0 4px;
+  font: 600 2rem/1 var(--body);
+}
+
+.stat-tile strong small {
+  margin-left: 5px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.stat-tile p {
+  margin: 0;
+  color: #8c9099;
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+.sparkline {
+  display: block;
+  width: 100%;
+  height: 34px;
+  margin-top: 10px;
+}
+
+.spark-line {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.32);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.spark-dot {
+  fill: var(--sun);
+  stroke: #10131a;
+  stroke-width: 2;
+}
+
+@media (max-width: 1000px) {
+  .training-dashboard,
+  .dash-charts {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dash-today {
+    grid-column: 1 / -1;
+  }
+
+  .stat-tiles {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .training-dashboard,
+  .dash-charts,
+  .stat-tiles {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-overview {
+    padding: 20px 18px;
+  }
+}

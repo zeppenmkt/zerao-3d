@@ -75,15 +75,14 @@
             <a class="daily-task derived" data-derived="sleep" href="sono" data-page-link="sono"><i>✓</i><span><b>Sono</b><small id="sleep-task-copy">Sono ainda não registrado</small></span><em aria-hidden="true">→</em></a>
             <a class="daily-task derived" data-derived="workout" href="treino" data-page-link="treino"><i>✓</i><span><b>Treino</b><small id="workout-task-copy">Treino ainda não iniciado</small></span><em aria-hidden="true">→</em></a>
           </article>
-          <article class="metrics-card dashboard-card">
-            <span class="card-label">Indicadores rápidos</span>
-            <div class="metric-grid">
-              <div><small>Peso atual</small><strong id="metric-weight">—</strong><span>kg</span></div>
-              <div><small>Último sono</small><strong id="metric-sleep">—</strong><span>horas</span></div>
-              <div><small>Séries hoje</small><strong id="metric-workout">0/0</strong><span>concluídas</span></div>
-              <div><small>Refeições</small><strong id="metric-meals">0</strong><span>registradas</span></div>
-            </div>
+          <article class="metrics-card dashboard-card goals-card">
+            <span class="card-label">Metas de hoje</span>
+            <div class="goal-list" id="today-goals"></div>
           </article>
+        </div>
+        <div class="progress-overview">
+          <div class="card-title-row"><span class="card-label">Progresso geral</span><b>últimas semanas</b></div>
+          <div class="stat-tiles" id="progress-tiles"></div>
         </div>
       </section>
 
@@ -91,6 +90,12 @@
         <div class="section-heading">
           <div><span class="section-number">01</span><div><p class="section-kicker">Ciclo sugerido A → B → C → D → descanso</p><h2 id="workout-title">TREINO A — PEITO + OMBROS</h2></div></div>
           <p id="workout-description">Peitoral superior, peitoral geral e deltoides. Marque as séries, registre as cargas e consulte cada movimento em 3D.</p>
+        </div>
+        <div class="training-dashboard" id="training-dashboard">
+          <article class="dash-card dash-today" id="dash-today"></article>
+          <article class="dash-card" id="dash-last"></article>
+          <article class="dash-card" id="dash-pace"></article>
+          <div class="dash-charts" id="training-charts"></div>
         </div>
         <div class="session-bar">
           <label>Data do treino<input id="session-date" type="date" required /></label>

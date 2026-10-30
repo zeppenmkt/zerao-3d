@@ -225,11 +225,11 @@ function assetPath(file) {
   return ZERAO_ASSET_VERSION ? file.replace(/\.js$/, `.${ZERAO_ASSET_VERSION}.js`) : file;
 }
 
-// Carrega em ordem: a biblioteca de exercícios, o treino e o restante do portal.
+// Carrega em ordem: a biblioteca de exercícios, o treino, o restante do portal e os painéis.
 function loadPortalScripts() {
   if (scriptsLoaded) return;
   scriptsLoaded = true;
-  ["exercises.js", "app.js", "portal.js"].reduce(
+  ["exercises.js", "app.js", "portal.js", "dashboard.js"].reduce(
     (previous, file) =>
       previous.then(
         () =>
