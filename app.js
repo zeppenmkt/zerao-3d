@@ -684,13 +684,14 @@ function renderPickerList() {
   const group = document.querySelector("#picker-group").value;
   const inWorkout = new Set(planFor(selectedWorkoutId).map((slot) => slot.id));
   const items = Object.entries(allExercises())
-    .filter(([, exercise]) => (!group || exercise.group === group) && (!query || normalizeText(exercise.name).includes(query)))
+    .filter(([, exercise]) => (!group || exercise.group === group) && (!query || normalizeText([exercise.name, ...(exercise.aliases ?? [])].join(" ")).includes(query)))
     .sort(([, a], [, b]) => EXERCISE_GROUPS.indexOf(a.group) - EXERCISE_GROUPS.indexOf(b.group) || a.name.localeCompare(b.name, "pt-BR"));
   document.querySelector("#picker-list").innerHTML = items.length
     ? items
         .map(([id, exercise]) => {
           const here = inWorkout.has(id);
-          const meta = [exercise.group, exercise.reps, exercise.custom ? "criado por você" : "", here ? "já está no treino" : ""].filter(Boolean).map(escapeHtml).join(" · ");
+          const aka = exercise.aliases?.length ? `também: ${exercise.aliases.slice(0, 2).join(", ")}` : "";
+          const meta = [exercise.group, exercise.reps, aka, exercise.custom ? "criado por você" : "", here ? "já está no treino" : ""].filter(Boolean).map(escapeHtml).join(" · ");
           return `<button type="button" data-pick="${escapeHtml(id)}" ${here ? "disabled" : ""}><b>${escapeHtml(exercise.name)}</b><small>${meta}</small></button>`;
         })
         .join("")
