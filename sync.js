@@ -285,8 +285,9 @@ function loadPortalScripts() {
   );
 }
 
-// Tudo que edita fica bloqueado para visitantes: o clique abre o login e, depois de entrar, a ação continua.
-const PUBLIC_CONTROLS = "[data-page-link], a[href], summary, .modal-close, [data-movement], #toggle-animation, [data-open-training], [data-auth], #auth-modal *";
+// Visitantes navegam e consultam tudo; o que grava, muda ou remove pede login e, depois de entrar, a ação continua.
+// Campos de formulário ficam livres para digitar: o login é pedido só no envio.
+const PUBLIC_CONTROLS = "[data-page-link], a[href], summary, .modal-close, [data-movement], #toggle-animation, [data-workout], [data-start-workout], [data-open-training], [data-auth], #auth-modal *";
 const EDIT_CONTROLS = "button, input, select, textarea, label";
 let pendingControl = null;
 
@@ -294,6 +295,7 @@ function lockedControl(target) {
   if (zeraoAuth.loggedIn || !(target instanceof Element)) return null;
   const control = target.closest(EDIT_CONTROLS);
   if (!control || control.closest(PUBLIC_CONTROLS) || !control.closest("main, dialog")) return null;
+  if (control.matches("input, select, textarea, label") && control.closest("form")) return null;
   return control;
 }
 
@@ -322,11 +324,12 @@ function openLogin(control = null) {
 }
 
 function guardEdit(event) {
-  const control = lockedControl(event.target);
+  const form = event.type === "submit" && !zeraoAuth.loggedIn && event.target.closest("main, dialog:not(#auth-modal)") ? event.target : null;
+  const control = form ? form.querySelector("[type=submit]") ?? form : lockedControl(event.target);
   if (!control) return;
   event.preventDefault();
   event.stopImmediatePropagation();
-  if (event.type === "click" || event.type === "keydown") openLogin(control);
+  if (["click", "keydown", "submit"].includes(event.type)) openLogin(control);
 }
 
 document.addEventListener("click", guardEdit, true);
