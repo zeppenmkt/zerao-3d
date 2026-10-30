@@ -493,15 +493,31 @@ function updateSet(exerciseId, setIndex, patch) {
   updateProgress();
 }
 
+// Fotos reais de início e fim do movimento, alternando como uma animação curta.
+function renderPhotos(exerciseId) {
+  const container = document.querySelector("#modal-photos");
+  const source = EXERCISE_PHOTOS[exerciseId];
+  container.hidden = !source;
+  if (!source) {
+    container.innerHTML = "";
+    return;
+  }
+  const frame = (index) => `${EXERCISE_PHOTO_BASE}/${source}/${index}.jpg`;
+  container.innerHTML = `<span>Execução real</span>
+    <div class="photo-frames"><img src="${frame(0)}" alt="Início do movimento" loading="lazy" /><img src="${frame(1)}" alt="Fim do movimento" loading="lazy" /></div>
+    <small>Fotos: free-exercise-db, domínio público. A variação mostrada pode diferir um pouco da sua.</small>`;
+}
+
 function openMovement(exerciseId) {
   currentExercise = currentExercises().find((exercise) => exercise.id === exerciseId);
   if (!currentExercise) return;
-  const index = currentExercises().indexOf(currentExercise) + 1;
+  const index = currentExercises().findIndex((exercise) => exercise.id === exerciseId) + 1;
   document.querySelector("#modal-index").textContent = String(index).padStart(2, "0");
   document.querySelector("#modal-title").textContent = currentExercise.name;
   document.querySelector("#modal-prescription").textContent = `${currentExercise.sets} séries · ${currentExercise.reps}`;
   document.querySelector("#modal-cue").textContent = currentExercise.cue || "Sem dica de execução cadastrada. Use as anotações abaixo para guardar as orientações que receber.";
   renderLoadHistory(currentExercise);
+  renderPhotos(currentExercise.id);
   renderNotes(currentExercise.id);
   document.querySelector("#youtube-link").href = `https://www.youtube.com/results?search_query=${encodeURIComponent(`Leandro Twin ${currentExercise.name} execução`)}`;
   document.querySelector("#play-icon").textContent = "Ⅱ";
@@ -940,9 +956,38 @@ const humanViewer = (() => {
     return { pivot, end: mesh.position.y * 2 };
   }
 
+  // Cabelo, barba, bigode, sobrancelhas e olhos presos à cabeça; a frente do boneco é +z.
+  function addFace(head, hair) {
+    const cap = new THREE.Mesh(new THREE.SphereGeometry(0.262, 24, 12, 0, Math.PI * 2, 0, Math.PI * 0.3), hair);
+    cap.position.y = 0.012;
+    head.add(cap);
+    const beard = new THREE.Mesh(new THREE.SphereGeometry(0.262, 24, 14, -0.25, Math.PI + 0.5, Math.PI * 0.54, Math.PI * 0.4), hair);
+    beard.scale.set(1, 1.08, 1.04);
+    head.add(beard);
+    const chin = new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 12), hair);
+    chin.position.set(0, -0.23, 0.13);
+    chin.scale.set(1.25, 0.9, 0.9);
+    head.add(chin);
+    const mustache = new THREE.Mesh(new THREE.CapsuleGeometry(0.026, 0.11, 6, 10), hair);
+    mustache.rotation.z = Math.PI / 2;
+    mustache.position.set(0, -0.055, 0.245);
+    head.add(mustache);
+    [-1, 1].forEach((side) => {
+      const brow = new THREE.Mesh(new THREE.BoxGeometry(0.085, 0.022, 0.03), hair);
+      brow.position.set(side * 0.085, 0.075, 0.232);
+      brow.rotation.z = side * -0.12;
+      head.add(brow);
+      const eye = new THREE.Mesh(new THREE.SphereGeometry(0.02, 10, 8), new THREE.MeshStandardMaterial({ color: 0x120d0b, roughness: 0.3 }));
+      eye.position.set(side * 0.082, 0.03, 0.238);
+      head.add(eye);
+    });
+  }
+
   function createHuman() {
-    const skin = new THREE.MeshStandardMaterial({ color: 0xd7a47e, roughness: 0.7 });
-    const shirt = new THREE.MeshStandardMaterial({ color: 0xf6c900, roughness: 0.52 });
+    // Aparência do Zé: pele morena, cabelo curto escuro, barba cheia e camiseta preta.
+    const skin = new THREE.MeshStandardMaterial({ color: 0x9c6a4a, roughness: 0.7 });
+    const hair = new THREE.MeshStandardMaterial({ color: 0x16110e, roughness: 0.95 });
+    const shirt = new THREE.MeshStandardMaterial({ color: 0x24262c, roughness: 0.82 });
     const shorts = new THREE.MeshStandardMaterial({ color: 0x171a21, roughness: 0.78 });
     const shoe = new THREE.MeshStandardMaterial({ color: 0xeeeeea, roughness: 0.68 });
 
@@ -975,6 +1020,7 @@ const humanViewer = (() => {
     head.scale.set(0.86, 1.08, 0.9);
     head.castShadow = true;
     torsoPivot.add(head);
+    addFace(head, hair);
 
     [-1, 1].forEach((side) => {
       const prefix = side < 0 ? "left" : "right";

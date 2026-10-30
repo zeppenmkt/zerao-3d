@@ -3715,3 +3715,58 @@ body.is-visitor main :is(input, select, textarea) {
     padding: 10px 14px;
   }
 }
+
+/* Fotos reais do exercício */
+.photo-ref {
+  margin-top: 16px;
+}
+
+.photo-ref > span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--sun);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.photo-frames {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #0b0d12;
+}
+
+.photo-frames img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-frames img + img {
+  animation: photo-swap 2.6s ease-in-out infinite;
+}
+
+.photo-ref small {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+@keyframes photo-swap {
+  0%, 35% { opacity: 0; }
+  50%, 85% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-frames img + img {
+    animation: none;
+    opacity: 0;
+  }
+}
